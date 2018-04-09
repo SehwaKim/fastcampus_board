@@ -1,0 +1,38 @@
+create table user_info(
+  user_id varchar(20) primary key,
+  user_pwd varchar(20) not null,
+  user_email varchar(45) not null,
+  user_nick varchar(50) not null,
+  user_name varchar(50) not null,
+  user_regdate timestamp default current_timestamp 
+);
+
+create table boards_category(
+    board_idx tinyint(1) primary key,
+    board_name varchar(20) not null
+);
+
+create table board(
+    board_id bigint primary key auto_increment,
+    board_title varchar(100) not null,
+    board_content text not null,
+    board_hit bigint default 0,
+    board_regdate timestamp default current_timestamp,
+    user_id varchar(20) not null,
+    board_idx tinyint(1) not null,
+    board_udate timestamp default current_timestamp,
+    foreign key(user_id) references user_info(user_id),
+    foreign key(board_idx) references boards_category(board_idx)
+);
+
+create table comment(
+    comment_idx bigint primary key auto_increment,
+    board_id bigint not null,
+    comment_content varchar(200) not null,
+    user_id varchar(20) not null,
+    comment_regdate timestamp default current_timestamp,
+    comment_depth tinyint(1) not null default 1,
+    comment_group bigint not null,
+    foreign key(board_id) references board(board_id),
+    foreign key(user_id) references user_info(user_id)
+);
