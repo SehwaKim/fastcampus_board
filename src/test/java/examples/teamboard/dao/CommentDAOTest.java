@@ -91,6 +91,8 @@ public class CommentDAOTest {
         Comment registedComment = commentDAO.selectComment(comment);
         
         assertEquals(comment.getContent(), registedComment.getContent());
+        
+        assertEquals(0, Long.compare(commentNo, registedComment.getComment_group()));
     }
     
 }
