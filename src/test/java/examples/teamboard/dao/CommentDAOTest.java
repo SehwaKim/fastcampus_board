@@ -1,5 +1,6 @@
 package examples.teamboard.dao;
 
+import examples.teamboard.common.Pagination;
 import examples.teamboard.config.DBConfig;
 import examples.teamboard.domain.Comment;
 import org.junit.Before;
@@ -8,13 +9,14 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
-
+@Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = DBConfig.class)
 public class CommentDAOTest {
@@ -35,8 +37,13 @@ public class CommentDAOTest {
     
     @Test
     public void testSelectCommentList() {
-        List<Comment> commentList = commentDAO.selectList(1L);
+        int postSize = 10;
+        Pagination pagination = new Pagination(0, postSize);
+        pagination.setStartIdx(0);
+        
+        List<Comment> commentList = commentDAO.selectList(1L, pagination);
         assertNotEquals(0, commentList.size());
+        assertEquals(postSize, commentList.size());
     }
     
     @Test
@@ -90,6 +97,26 @@ public class CommentDAOTest {
         assertEquals(comment.getContent(), registedComment.getContent());
         
         assertEquals(0, Long.compare(commentNo, registedComment.getComment_group()));
+    }
+    
+    @Test
+    public void testDeleteComment() {
+        
+        // given
+        Comment comment = new Comment();
+        comment.setBoardNo(1L);
+        comment.setUser_id("studyman");
+        comment.setContent("testContent");
+        Long commentNo = commentDAO.insertComment(comment);
+        long beforeCount = commentDAO.totalCommentCount(comment.getBoardNo());
+        
+        // when
+        int deleteCount = commentDAO.deleteComment(commentNo);
+        long afterCount = commentDAO.totalCommentCount(comment.getBoardNo());
+        
+        // then
+        assertEquals(1, deleteCount);
+        assertEquals(beforeCount - 1, afterCount);
     }
     
 }

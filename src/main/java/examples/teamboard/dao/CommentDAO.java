@@ -1,5 +1,6 @@
 package examples.teamboard.dao;
 
+import examples.teamboard.common.Pagination;
 import examples.teamboard.domain.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -7,6 +8,7 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -51,15 +53,13 @@ public class CommentDAO {
         return commentNo;
     }
 
-    public List<Comment> selectList(Long boardNo){
-        String sql = CommentSQL.selectList;
-        Map<String, Long> map = Collections.singletonMap("boardNo", boardNo);
-        List<Comment> list = jdbcTemplate.query(sql, map, rowMapper);
-
-        //TODO
-        // 페이징처리 해야 함
-
-        return list;
+    public List<Comment> selectList(Long boardNo, Pagination pagination) {
+        SqlParameterSource parameterSource = new MapSqlParameterSource()
+                .addValue("boardNo", boardNo)
+                .addValue("postSize", pagination.getPostSize())
+                .addValue("startIdx", pagination.getStartIdx());
+    
+        return jdbcTemplate.query(CommentSQL.selectList, parameterSource, rowMapper);
     }
 
     public int deleteComment(Long commentNo){

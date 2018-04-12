@@ -60,7 +60,7 @@ public class BoardDAOTest {
     @Test
     public void testSelectBoardList() throws Exception {
         // when
-        List<Board> list = boardDAO.selectBoardList();
+        List<Board> list = boardDAO.selectBoardList(1);
 
         // then
         Assert.assertEquals(68,list.size());
