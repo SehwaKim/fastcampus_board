@@ -14,7 +14,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class UserDAO {
@@ -28,18 +28,21 @@ public class UserDAO {
         insert = new SimpleJdbcInsert(dataSource).withTableName("user_info").usingGeneratedKeyColumns("user_no");
 
     }
-    public User selectUser(User user)
+    public Map<String,String> selectUser(String id)
     {
-        User returnUser = null;
-        SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
+        Map<String,String> result = new HashMap<>();
+        User user= null;
+        Map<String,String> map=Collections.singletonMap("id",id);
         try{
-            returnUser = template.queryForObject(UserSQL.selectUser, parameterSource,rowMapper);
+            user= template.queryForObject(UserSQL.selectUser, map,rowMapper);
 
         } catch (DataAccessException e){
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        return returnUser;
+        result.put("id",user.getId());
+        result.put("pwd",user.getPwd());
+        return result;
     }
     public Long insertUser(User user)
     {
@@ -48,13 +51,16 @@ public class UserDAO {
         return userNo.longValue();
     }
 
-    public String selectUserId(User user)
+    public String selectUserId(String name,String email)
     {
         String userId = null;
-        SqlParameterSource parameterSource= new BeanPropertySqlParameterSource(user);
+       // SqlParameterSource parameterSource= new BeanPropertySqlParameterSource(user);
+        Map<String,String> map = new HashMap<>();
+        map.put("name",name);
+        map.put("email",email);
         try
         {
-            userId = template.queryForObject(UserSQL.selectUserId,parameterSource,String.class);
+            userId = template.queryForObject(UserSQL.selectUserId,map,String.class);
         }catch (IncorrectResultSizeDataAccessException e){
             e.printStackTrace();
         }catch (DataAccessException e){
@@ -62,13 +68,15 @@ public class UserDAO {
         }
         return userId;
     }
-    public String selectUserPwd(User user)
+    public String selectUserPwd(String id, String email)
     {
         String userPwd = null;
-        SqlParameterSource parameterSource= new BeanPropertySqlParameterSource(user);
+        Map<String,String> map = new HashMap<>();
+        map.put("id",id);
+        map.put("email",email);
         try
         {
-            userPwd = template.queryForObject(UserSQL.selectUserPwd,parameterSource,String.class);
+            userPwd = template.queryForObject(UserSQL.selectUserPwd,map,String.class);
         }catch (IncorrectResultSizeDataAccessException e){
             e.printStackTrace();
         }catch (DataAccessException e){
