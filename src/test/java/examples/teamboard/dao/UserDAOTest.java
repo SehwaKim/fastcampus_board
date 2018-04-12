@@ -1,6 +1,7 @@
 package examples.teamboard.dao;
 
 import examples.teamboard.config.DBConfig;
+import examples.teamboard.dao.UserDAO;
 import examples.teamboard.domain.User;
 import org.junit.After;
 import org.junit.Assert;
