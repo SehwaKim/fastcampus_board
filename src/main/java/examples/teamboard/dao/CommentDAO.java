@@ -28,7 +28,11 @@ public class CommentDAO {
     @Autowired
     public CommentDAO(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        this.jdbcInsert = new SimpleJdbcInsert(dataSource).withTableName("comment").usingGeneratedKeyColumns("comment_no");
+        this.jdbcInsert = new SimpleJdbcInsert(dataSource)
+                .withTableName("comment")
+                .usingGeneratedKeyColumns("comment_no")
+                .usingColumns("board_no", "content", "user_id");
+        
     }
 
     public Long insertComment(Comment comment){

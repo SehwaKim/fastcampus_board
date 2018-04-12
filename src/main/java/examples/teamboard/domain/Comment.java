@@ -12,5 +12,5 @@ public class Comment {
     private String user_id;
     private Date regdate;
     private int depth;
-    private long comment_group;
+    private Long comment_group;
 }
