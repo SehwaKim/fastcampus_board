@@ -83,7 +83,7 @@ public class BoardDAOTest {
 
         // then
         Board board2 = boardDAO.selectBoard(boardNo);
-        Assert.assertEquals(1, count);
+        Assert.assertEquals("Good afternoon!", board2.getContent());
     }
 
     @Test
