@@ -50,18 +50,18 @@ public class UserDAOTest {
         //암호화 해야됨..
     }
 
-//    @Test
-//    public void testInsertUser()
-//    {
-//        User user = new User();
-//        user.setId("testId");
-//        user.setPwd("1234");
-//        user.setEmail("testEmail@gmail.com");
-//        user.setName("김또치");
-//        user.setNickName("또치또치");
-//       long result = userDAO.insertUser(user);
-//       Assert.assertEquals(9,result);
-//    }
+    @Test
+    public void testInsertUser()
+    {
+        User user = new User();
+        user.setId("testId");
+        user.setPwd("1234");
+        user.setEmail("testEmail@gmail.com");
+        user.setName("김또치");
+        user.setNickName("또치또치");
+       long result = userDAO.insertUser(user);
+       Assert.assertEquals(9,result);
+    }
 
     @Test
     public  void testSelectUserID()
