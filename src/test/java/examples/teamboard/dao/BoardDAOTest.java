@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -46,8 +47,39 @@ public class BoardDAOTest {
     }
 
     @Test
-    public void testSelectBoard(){
+    public void testSelectBoard() throws Exception {
         Board board = boardDAO.selectBoard(1L);
         Assert.assertEquals("studyman",board.getUserId());
+    }
+
+    @Test
+    public void testSelectBoardList() throws Exception {
+        Board board = new Board();
+
+        board.setTitle("title");
+        board.setContent("content");
+        board.setUserId("studyman");
+        board.setCategoryNo(1);
+        List<Board> list = boardDAO.selectBoardList(board);
+        Assert.assertEquals(68,list.size());
+    }
+
+    @Test
+    public void testUpdateBoard() throws Exception {
+        Board board = new Board();
+
+        board.setBoardNo(1L);
+        board.setTitle("title");
+        board.setContent("content");
+        board.setUserId("studyman");
+        board.setCategoryNo(1);
+        int count = boardDAO.updateBoard(board);
+        Assert.assertEquals(1, count);
+    }
+
+    @Test
+    public void testDeleteBoard() throws Exception {
+        int count = boardDAO.deleteBoard(1L);
+        Assert.assertEquals(1, count);
     }
 }

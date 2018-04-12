@@ -37,6 +37,10 @@ public class DBConfig {
 
         return dataSource;
     }
+    @Bean
+    public PlatformTransactionManager transactionManger() {
+        return new DataSourceTransactionManager(dataSource());
+    }
 
     @Bean
     public PlatformTransactionManager transactionManger() {
