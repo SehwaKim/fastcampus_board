@@ -36,50 +36,63 @@ public class BoardDAOTest {
     @Test
     @Rollback
     public void testInsertBoard(){
+        // when
         Board board = new Board();
-
         board.setTitle("title");
         board.setContent("content");
         board.setUserId("studyman");
         board.setCategoryNo(1);
         long boardNo = boardDAO.insertBoard(board);
+
+        // then
         Assert.assertEquals(69, boardNo);
     }
 
     @Test
     public void testSelectBoard() throws Exception {
+        // when
         Board board = boardDAO.selectBoard(1L);
+
+        // then
         Assert.assertEquals("studyman",board.getUserId());
     }
 
     @Test
     public void testSelectBoardList() throws Exception {
-        Board board = new Board();
+        // when
+        List<Board> list = boardDAO.selectBoardList();
 
-        board.setTitle("title");
-        board.setContent("content");
-        board.setUserId("studyman");
-        board.setCategoryNo(1);
-        List<Board> list = boardDAO.selectBoardList(board);
+        // then
         Assert.assertEquals(68,list.size());
     }
 
     @Test
     public void testUpdateBoard() throws Exception {
+        // given
         Board board = new Board();
-
-        board.setBoardNo(1L);
         board.setTitle("title");
-        board.setContent("content");
+        board.setContent("Good morning!");
         board.setUserId("studyman");
         board.setCategoryNo(1);
-        int count = boardDAO.updateBoard(board);
+        long boardNo = boardDAO.insertBoard(board);
+        Board board1 = boardDAO.selectBoard(boardNo);
+
+        // when
+        board1.setContent("Good afternoon!");
+        int count = boardDAO.updateBoard(board1);
+
+        // then
+        Board board2 = boardDAO.selectBoard(boardNo);
         Assert.assertEquals(1, count);
     }
 
     @Test
     public void testDeleteBoard() throws Exception {
+        // when
         int count = boardDAO.deleteBoard(1L);
-        Assert.assertEquals(1, count);
+
+        // then
+        Board board = boardDAO.selectBoard(1L);
+        Assert.assertNull(board);
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,10 +37,10 @@ public class BoardDAO {
         return boardNo.longValue();
     }
 
-    public List<Board> selectBoardList(Board board){
+    public List<Board> selectBoardList(){
         String sql = BoardSQL.selectList;
-        SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(board);
-        List<Board> boardList = jdbcTemplate.query(sql, namedParameters, rowMapper);
+
+        List<Board> boardList = jdbcTemplate.query(sql, rowMapper);
 
         return boardList;
     }
