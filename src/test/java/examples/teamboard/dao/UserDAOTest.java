@@ -18,7 +18,9 @@ import javax.sql.DataSource;
 import javax.xml.crypto.Data;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import java.util.Map;
+
 
 @Rollback
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,10 +44,12 @@ public class UserDAOTest {
     @Test
     public  void testSelectUser()
     {
+
         Map<String,String> map =  userDAO.selectUser("noriming2");
         Assert.assertEquals("noriming2", map.get("id"));
         //TODO
         //암호화 해야됨..
+
     }
 
     @Test
