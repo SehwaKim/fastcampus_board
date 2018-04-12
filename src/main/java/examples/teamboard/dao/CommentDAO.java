@@ -2,18 +2,22 @@ package examples.teamboard.dao;
 
 import examples.teamboard.domain.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+@Repository
 public class CommentDAO {
     private NamedParameterJdbcTemplate jdbcTemplate;
     private SimpleJdbcInsert jdbcInsert;
@@ -40,11 +44,11 @@ public class CommentDAO {
         return count;
     }
 
-    public int registComment(Comment comment){
+    public Long registComment(Comment comment){
         Long commentNo = insertComment(comment);
         int count = updateCommentGroup(commentNo);
 
-        return count;
+        return commentNo;
     }
 
     public List<Comment> selectList(Long boardNo){
@@ -64,6 +68,26 @@ public class CommentDAO {
         int count = jdbcTemplate.update(sql, map);
 
         return count;
+    }
+    
+    public Long totalCommentCount(Long boardNo) {
+        try {
+            return jdbcTemplate.queryForObject(CommentSQL.totalCommentCount, Collections.singletonMap("boardNo", boardNo), Long.class);
+        }
+        catch (IncorrectResultSizeDataAccessException e) {
+            return 0L;
+        }
+        
+    }
+    
+    public Comment selectComment(Comment comment) {
+        SqlParameterSource sqlParameterSource = new BeanPropertySqlParameterSource(comment);
+        try {
+            return jdbcTemplate.queryForObject(CommentSQL.selectComment, sqlParameterSource, rowMapper);
+        }
+        catch (IncorrectResultSizeDataAccessException e) {
+            return null;
+        }
     }
 
 }
