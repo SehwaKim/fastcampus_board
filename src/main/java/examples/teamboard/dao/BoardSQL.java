@@ -34,5 +34,7 @@ public final class BoardSQL {
 
     public static final String deleteBoard = "DELETE from board where board_no = :boardNo";
 
+    public static final String updateBoardHit = "update board set hit = hit+1 where board_no = :boardNo";
+
     private BoardSQL(){}
 }
