@@ -46,6 +46,7 @@ public class BoardDAO {
     public Board selectBoard(Long boardNo){
         String sql = BoardSQL.selectBoard;
         Map<String, Long> map = Collections.singletonMap("boardNo", boardNo);
+
         try {
             Board board = jdbcTemplate.queryForObject(sql, map, rowMapper);
 
