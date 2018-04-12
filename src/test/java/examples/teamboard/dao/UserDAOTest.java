@@ -1,6 +1,7 @@
 package examples.teamboard.dao;
 
 import examples.teamboard.config.DBConfig;
+import examples.teamboard.dao.UserDAO;
 import examples.teamboard.domain.User;
 import org.junit.After;
 import org.junit.Assert;
@@ -17,6 +18,9 @@ import javax.sql.DataSource;
 import javax.xml.crypto.Data;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import java.util.Map;
+
 
 @Rollback
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -40,10 +44,12 @@ public class UserDAOTest {
     @Test
     public  void testSelectUser()
     {
-        User user = new User();
-        user.setId("sehwa");
-        User resultUser =  userDAO.selectUser(user);
-        Assert.assertEquals("1235", resultUser.getPwd());
+
+        Map<String,String> map =  userDAO.selectUser("noriming2");
+        Assert.assertEquals("noriming2", map.get("id"));
+        //TODO
+        //암호화 해야됨..
+
     }
 
     @Test
@@ -62,20 +68,14 @@ public class UserDAOTest {
     @Test
     public  void testSelectUserID()
     {
-        User user = new User();
-        user.setName("박전파");
-        user.setEmail("freewifi@naver.com");
-        String userId =  userDAO.selectUserId(user);
+        String userId =  userDAO.selectUserId("박전파","freewifi@naver.com");
         Assert.assertEquals("freewifi", userId);
     }
 
     @Test
     public  void testSelectUserPwd()
     {
-        User user = new User();
-        user.setId("freewifi");
-        user.setEmail("freewifi@naver.com");
-        String userPwd =  userDAO.selectUserPwd(user);
+        String userPwd =  userDAO.selectUserPwd("freewifi","freewifi@naver.com");
         Assert.assertEquals("freewifi", userPwd);
     }
 
