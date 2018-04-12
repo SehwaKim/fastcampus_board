@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Import;
 
 @Import(DBConfig.class)
 @Configuration
-@ComponentScan(basePackages = "examples.teamboard.dao")
+@ComponentScan(basePackages = {"examples.teamboard.dao", "examples.teamboard.service"})
 public class RootApplicationContextConfig {
 
 }
