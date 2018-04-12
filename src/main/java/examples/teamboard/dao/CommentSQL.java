@@ -1,6 +1,9 @@
 package examples.teamboard.dao;
 
+import org.springframework.dao.DataAccessException;
+
 public final class CommentSQL {
+    
     public static final String selectList = "select comment_no" +
             "    , user_id\n" +
             "    , content\n" +
@@ -8,9 +11,9 @@ public final class CommentSQL {
             "    , depth\n" +
             " from comment\n" +
             " where board_no = :boardNo\n" +
-            " order by comment_group, comment_no";
-            //"LIMIT 0, 10";
-
+            " order by comment_group, comment_no\n"+
+            " limit :startIdx, :postSize";
+        
     public static final String updateCommentGroup = "UPDATE comment set comment_group = comment_no where comment_no = :commentNo";
 
     public static final String deleteComment = "DELETE from comment where comment_no = :commentNo";
