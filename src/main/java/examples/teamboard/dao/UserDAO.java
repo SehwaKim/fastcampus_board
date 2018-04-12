@@ -28,9 +28,8 @@ public class UserDAO {
         insert = new SimpleJdbcInsert(dataSource).withTableName("user_info").usingGeneratedKeyColumns("user_no");
 
     }
-    public Map<String,String> selectUser(String id)
+    public User selectUser(String id)
     {
-        Map<String,String> result = new HashMap<>();
         User user= null;
         Map<String,String> map=Collections.singletonMap("id",id);
         try{
@@ -40,9 +39,7 @@ public class UserDAO {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
-        result.put("id",user.getId());
-        result.put("pwd",user.getPwd());
-        return result;
+        return user;
     }
     public Long insertUser(User user)
     {
@@ -54,7 +51,6 @@ public class UserDAO {
     public String selectUserId(String name,String email)
     {
         String userId = null;
-       // SqlParameterSource parameterSource= new BeanPropertySqlParameterSource(user);
         Map<String,String> map = new HashMap<>();
         map.put("name",name);
         map.put("email",email);

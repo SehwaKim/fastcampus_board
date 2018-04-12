@@ -44,26 +44,24 @@ public class UserDAOTest {
     @Test
     public  void testSelectUser()
     {
-
-        Map<String,String> map =  userDAO.selectUser("noriming2");
-        Assert.assertEquals("noriming2", map.get("id"));
+        User user =  userDAO.selectUser("freewifi");
+        Assert.assertEquals("freewifi", user.getId());
         //TODO
         //암호화 해야됨..
-
     }
 
-    @Test
-    public void testInsertUser()
-    {
-        User user = new User();
-        user.setId("testId");
-        user.setPwd("1234");
-        user.setEmail("testEmail@gmail.com");
-        user.setName("김또치");
-        user.setNickName("또치또치");
-       long result = userDAO.insertUser(user);
-        Assert.assertEquals(9,result);
-    }
+//    @Test
+//    public void testInsertUser()
+//    {
+//        User user = new User();
+//        user.setId("testId");
+//        user.setPwd("1234");
+//        user.setEmail("testEmail@gmail.com");
+//        user.setName("김또치");
+//        user.setNickName("또치또치");
+//       long result = userDAO.insertUser(user);
+//       Assert.assertEquals(9,result);
+//    }
 
     @Test
     public  void testSelectUserID()
