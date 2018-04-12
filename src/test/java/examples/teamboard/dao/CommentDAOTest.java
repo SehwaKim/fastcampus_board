@@ -3,7 +3,6 @@ package examples.teamboard.dao;
 import examples.teamboard.config.DBConfig;
 import examples.teamboard.domain.Comment;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,14 +12,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
-
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
-@Transactional
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = DBConfig.class)
 public class CommentDAOTest {
@@ -60,6 +56,7 @@ public class CommentDAOTest {
         assertNotNull(selectedComment);
     }
     
+    
     @Test
     public void testInsertComment() {
         
@@ -72,6 +69,8 @@ public class CommentDAOTest {
         long commentNo = commentDAO.insertComment(comment);
         long afterCommentCount = commentDAO.totalCommentCount(comment.getBoardNo());
         
+        System.out.println(commentNo);
+        
         assertNotEquals(0, commentNo);
         assertNotEquals(beforeCommentCount, afterCommentCount);
         assertEquals(beforeCommentCount + 1L, afterCommentCount);
@@ -79,12 +78,12 @@ public class CommentDAOTest {
     
     @Test
     public void testRegistComment() {
-    
+        
         Comment comment = new Comment();
         comment.setBoardNo(1L);
         comment.setContent("comment content");
         comment.setUser_id("studyman");
-    
+        
         Long commentNo = commentDAO.registComment(comment);
         comment.setCommentNo(commentNo);
         
@@ -96,3 +95,4 @@ public class CommentDAOTest {
     }
     
 }
+
