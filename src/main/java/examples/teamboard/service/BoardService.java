@@ -8,7 +8,7 @@ import java.util.List;
 public interface BoardService {
     public List<Board> getBoards(Pagination pagination, int categoryNo);
     public Board getBoard(Long boardNo);
-    public int addBoard(Board board);
+    public Long addBoard(Board board);
     public int updateBoard(Board board);
     public int deleteBoard(Long boardNo);
 }
