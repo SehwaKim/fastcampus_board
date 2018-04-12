@@ -25,7 +25,7 @@ public class UserDAO {
     @Autowired
     public UserDAO(DataSource dataSource) {
         template = new NamedParameterJdbcTemplate(dataSource);
-        insert = new SimpleJdbcInsert(dataSource).withTableName("user").usingGeneratedKeyColumns("user_no");
+        insert = new SimpleJdbcInsert(dataSource).withTableName("user_info").usingGeneratedKeyColumns("user_no");
 
     }
     public User selectUser(User user)
@@ -34,10 +34,10 @@ public class UserDAO {
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
         try{
             returnUser = template.queryForObject(UserSQL.selectUser, parameterSource,rowMapper);
-        }catch (IncorrectResultSizeDataAccessException e){
+
+        } catch (DataAccessException e){
             e.printStackTrace();
-        }catch (DataAccessException e){
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         return returnUser;
     }
