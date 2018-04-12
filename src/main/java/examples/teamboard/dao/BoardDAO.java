@@ -37,10 +37,11 @@ public class BoardDAO {
         return boardNo.longValue();
     }
 
-    public List<Board> selectBoardList(){
+    public List<Board> selectBoardList(int categoryNo){
         String sql = BoardSQL.selectList;
+        Map<String, Integer> map = Collections.singletonMap("categoryNo", categoryNo);
 
-        List<Board> boardList = jdbcTemplate.query(sql, rowMapper);
+        List<Board> boardList = jdbcTemplate.query(sql, map, rowMapper);
 
         return boardList;
     }
