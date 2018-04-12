@@ -44,6 +44,8 @@ public class UserDAOTest {
     {
         Map<String,String> map =  userDAO.selectUser("noriming2");
         Assert.assertEquals("noriming2", map.get("id"));
+        //TODO
+        //암호화 해야됨..
     }
 
     @Test
