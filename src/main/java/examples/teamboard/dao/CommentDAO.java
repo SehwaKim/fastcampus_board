@@ -46,13 +46,6 @@ public class CommentDAO {
         return count;
     }
 
-    public Long registComment(Comment comment){
-        Long commentNo = insertComment(comment);
-        int count = updateCommentGroup(commentNo);
-
-        return commentNo;
-    }
-
     public List<Comment> selectList(Long boardNo, Pagination pagination) {
         SqlParameterSource parameterSource = new MapSqlParameterSource()
                 .addValue("boardNo", boardNo)

@@ -9,8 +9,8 @@ public interface CommentService {
 
     public List<Comment> getComments(long boardNo, Pagination pagination);
     
-    public int registComment(Comment comment);
+    public long registComment(Comment comment);
     
-    public int deleteComment(Comment comment);
+    public int deleteComment(long commentNo);
 
 }

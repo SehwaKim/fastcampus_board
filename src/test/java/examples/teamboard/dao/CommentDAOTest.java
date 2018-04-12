@@ -89,9 +89,10 @@ public class CommentDAOTest {
         comment.setContent("comment content");
         comment.setUser_id("studyman");
         
-        Long commentNo = commentDAO.registComment(comment);
+        Long commentNo = commentDAO.insertComment(comment);
+        commentDAO.updateCommentGroup(commentNo);
+    
         comment.setCommentNo(commentNo);
-        
         Comment registedComment = commentDAO.selectComment(comment);
         
         assertEquals(comment.getContent(), registedComment.getContent());
