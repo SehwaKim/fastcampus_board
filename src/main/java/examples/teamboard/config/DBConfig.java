@@ -5,11 +5,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
 @Configuration
 @PropertySource("classpath:/application.properties")
+@EnableTransactionManagement
 public class DBConfig {
     @Value("${studyboard.url}")
     private String url;
@@ -33,5 +37,11 @@ public class DBConfig {
 
         return dataSource;
     }
+
+    @Bean
+    public PlatformTransactionManager transactionManger() {
+        return new DataSourceTransactionManager(dataSource());
+    }
+
 
 }
