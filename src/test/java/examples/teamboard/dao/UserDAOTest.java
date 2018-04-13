@@ -39,36 +39,60 @@ public class UserDAOTest {
     }
     @Test
     public  void testSelectUser() {
-        User user =  userDAO.selectUser("freewifi");
-        Assert.assertEquals("freewifi", user.getId());
+        User user = new User();
+        user.setId("selecTest");
+        user.setPwd(SecureUtil.sha256Encoding("selecTest"));
+        user.setEmail("selecTest@gmail.com");
+        user.setName("이셀렉");
+        user.setNickName("selecTestNic");
+        boolean inUser = userDAO.insertUser(user);
+
+        User user1 = userDAO.selectUser(user.getId());
+        Assert.assertEquals(user1.getId(), user.getId());
     }
 
     @Test
-    public void testInsertUser() throws NoSuchAlgorithmException{
+    public void testInsertUser() {
         User user = new User();
-        user.setId("Test4");
-        user.setPwd(SecureUtil.sha256Encoding("Test4"));
-        user.setEmail("testEmail4@gmail.com");
-        user.setName("김김4");
-        user.setNickName("김테스트4");
+        user.setId("InsertTest");
+        user.setPwd(SecureUtil.sha256Encoding("InsertTest"));
+        user.setEmail("InsertTest@gmail.com");
+        user.setName("김인설");
+        user.setNickName("InsertTestNic");
         userDAO.insertUser(user);
 
-        String id = userDAO.selectUserId("김또치","testEmail@gmail.com");
-        Assert.assertEquals("TestUser2",id);
+        String compId = userDAO.selectUserId(user.getName(),user.getEmail());
+        Assert.assertEquals(user.getId(),compId);
 
     }
 
     @Test
     public  void testSelectUserID() {
-        String userId =  userDAO.selectUserId("박전파","freewifi@naver.com");
-        Assert.assertEquals("freewifi", userId);
+        User user = new User();
+        user.setId("SelecIDTest");
+        user.setPwd(SecureUtil.sha256Encoding("SelecIDTest"));
+        user.setEmail("SelecIDTest@gmail.com");
+        user.setName("김아이디");
+        user.setNickName("SelecIDTestNic");
+        userDAO.insertUser(user);
+
+        String userId =  userDAO.selectUserId(user.getName(),user.getEmail());
+        Assert.assertEquals(user.getId(), userId);
     }
 
     @Test
     public  void testSelectUserPwd() throws NoSuchAlgorithmException {
 
-        String userPwd =  userDAO.selectUserPwd("freewifi","freewifi@naver.com");
-       String compPwd =  SecureUtil.sha256Encoding("freewifi");
-        Assert.assertEquals(compPwd, userPwd);
+        User user = new User();
+        user.setId("SelecPwdTest");
+        user.setPwd(SecureUtil.sha256Encoding("SelecPwdTest"));
+        user.setEmail("SelecPwdTest@gmail.com");
+        user.setName("김패스");
+        user.setNickName("SelecPwdTestNic");
+        userDAO.insertUser(user);
+
+        String userPwd =  userDAO.selectUserPwd(user.getId(),user.getEmail());
+
+        Assert.assertEquals(user.getPwd(), userPwd);
     }
 }

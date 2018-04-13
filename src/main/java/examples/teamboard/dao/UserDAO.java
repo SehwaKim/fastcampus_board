@@ -29,24 +29,27 @@ public class UserDAO {
     }
     public User selectUser(String id)
     {
-        User user= null;
+        User user = null;
         Map<String,String> map=Collections.singletonMap("id",id);
         try{
             user= template.queryForObject(UserSQL.selectUser, map,rowMapper);
 
         } catch (DataAccessException e){
-            throw e;
+           user = null;
         }
         return user;
     }
-    public void insertUser(User user)
+    public boolean insertUser(User user)
     {
+        boolean result;
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
         try {
             insert.execute(parameterSource);
+            result = true;
         } catch (DataAccessException e) {
-            throw e;
+            result = false;
         }
+        return result;
     }
 
     public String selectUserId(String name,String email)
@@ -58,7 +61,7 @@ public class UserDAO {
         try {
             userId = template.queryForObject(UserSQL.selectUserId,map,String.class);
         }catch (DataAccessException e){
-            throw  e;
+           userId = null;
         }
         return userId;
     }
@@ -71,7 +74,7 @@ public class UserDAO {
         try {
             userPwd = template.queryForObject(UserSQL.selectUserPwd,map,String.class);
         }catch (DataAccessException e){
-            throw e;
+            userPwd = null;
         }
         return userPwd;
     }
