@@ -16,18 +16,25 @@ public final class BoardSQL {
                     " LEFT OUTER JOIN user_info u ON board.user_id = u.id" +
                     " where category_no = :categoryNo" +
                     "  GROUP BY board.board_no" +
-                    " limit :startIdx :postSize";
-    
+                    " limit :startIdx, :postSize";
+
+    public static String getTotalCnt(String searchType){
+        StringBuilder sb = new StringBuilder("select count(*) as totalCnt from board\n");
+        if(searchType != null){
+            if(!isCorrectSearchType(searchType)) {
+                throw new IllegalArgumentException("Incorrect SearchType :: " + searchType);
+            }
+            sb.append("where board.").append(searchType).append(" like concat('%', :searchStr, '%')");
+        }
+        return sb.toString();
+    }
+
     /**
      * 검색용 쿼리 생성
      * @param searchType
      * @return
      */
-    public static String createSelectSearchListSQL(String searchType) {
-        if(!isCorrectSearchType(searchType)) {
-            throw new IllegalArgumentException("Incorrect SearchType :: " + searchType);
-        }
-        
+    public static String createSelectListSQL(String searchType) {
         StringBuilder sb = new StringBuilder();
         sb.append("select board.board_no\n");
         sb.append(", title\n");
@@ -41,9 +48,14 @@ public final class BoardSQL {
         sb.append("on board.board_no = comment.board_no\n");
         sb.append("LEFT OUTER JOIN user_info u ON board.user_id = u.id\n");
         sb.append("where category_no = :categoryNo\n");
-        sb.append(searchType).append(" like CONCAT('%', :searchType, '%')\n");
+        if(searchType != null) {
+            if(!isCorrectSearchType(searchType)) {
+                throw new IllegalArgumentException("Incorrect SearchType :: " + searchType);
+            }
+            sb.append("and board.").append(searchType).append(" like CONCAT('%', :searchStr, '%')\n");
+        }
         sb.append("GROUP BY board.board_no\n");
-        sb.append("limit :startIdx :postSize");
+        sb.append("limit :startIdx, :postSize");
         
         return sb.toString();
     }
