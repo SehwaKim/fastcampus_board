@@ -4,24 +4,23 @@ import examples.teamboard.common.Pagination;
 import examples.teamboard.dao.BoardDAO;
 import examples.teamboard.domain.Board;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
 public class BoardServiceImpl implements BoardService {
-    @Autowired
     private BoardDAO boardDAO;
 
-    @Override
-    @Transactional
-    public List<Board> getBoards(Pagination pagination, int categoryNo) {
-        //TODO
-        // Pagination 객체를 이용해서 페이징 처리를 해야함
-        // 현재는 category_no로 카테고리별 모든 게시물 가져오고 있음
-        // 검색의 경우도 구현해야 함
+    public BoardServiceImpl(BoardDAO boardDAO) {
+        this.boardDAO = boardDAO;
+    }
 
-        List<Board> list = boardDAO.selectBoardList(categoryNo);
-        return list;
+    @Override
+    @Transactional(readOnly = true)
+    public List<Board> getBoards(Pagination pagination, int categoryNo, String searchType, String searchStr) {
+        return boardDAO.selectBoardList(pagination, categoryNo, searchType, searchStr);
     }
 
     @Override
@@ -40,22 +39,24 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public Long addBoard(Board board) {
-        Long boardNo = boardDAO.insertBoard(board);
-        return boardNo;
+        return boardDAO.insertBoard(board);
     }
 
     @Override
     @Transactional
     public int updateBoard(Board board) {
-        int count = boardDAO.updateBoard(board);
-        return count;
+        return boardDAO.updateBoard(board);
     }
 
     @Override
     @Transactional
     public int deleteBoard(Long boardNo) {
-        //글이 삭제되면 딸린 댓글도 모두 삭제 되어야 한다. 한 트랜젝션인가?
-        int count = boardDAO.deleteBoard(boardNo);
-        return count;
+        return boardDAO.deleteBoard(boardNo);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public int getTotalCnt(String searchType, String searchStr){
+        return boardDAO.selectTotalCnt(searchType, searchStr);
     }
 }
