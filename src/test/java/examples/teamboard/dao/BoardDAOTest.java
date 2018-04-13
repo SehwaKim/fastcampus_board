@@ -1,5 +1,6 @@
 package examples.teamboard.dao;
 
+import examples.teamboard.common.Pagination;
 import examples.teamboard.config.DBConfig;
 import examples.teamboard.domain.Board;
 import org.junit.Assert;
@@ -35,7 +36,7 @@ public class BoardDAOTest {
 
     @Test
     @Rollback
-    public void testInsertBoard(){
+    public void testInsertBoard() {
         // when
         Board board = new Board();
         board.setTitle("hello");
@@ -50,7 +51,7 @@ public class BoardDAOTest {
     }
 
     @Test
-    public void testSelectBoard() throws Exception {
+    public void testSelectBoard() {
         // given
         Board board = new Board();
         board.setTitle("hello");
@@ -67,18 +68,48 @@ public class BoardDAOTest {
     }
 
     @Test
-    public void testSelectBoardList() throws Exception {
-        // when
-        List<Board> list = boardDAO.selectBoardList(1);
+    public void testSelectTotalCnt(){
+        // given
+        String searchType = "title";
+        String searchStr = "안녕";
 
-        // then
-        //TODO
-        // 전체 게시글 가져오는 sql 만들고 그거랑 비교해야함
-        Assert.assertEquals(68,list.size());
+        // when
+        int totalCnt = boardDAO.selectTotalCnt(searchType, searchStr);
+        System.out.println(totalCnt);
     }
 
     @Test
-    public void testUpdateBoard() throws Exception {
+    public void testSelectSearchedBoardList() {
+        // given
+        String searchType = "title";
+        String searchStr = "안녕";
+        int totalCnt = boardDAO.selectTotalCnt(searchType, searchStr);
+        int postSize = 10;
+        Pagination pagination = new Pagination(totalCnt, postSize);
+
+        // when
+        List<Board> list = boardDAO.selectBoardList(pagination, 1, searchType, searchStr);
+
+        // then
+        Assert.assertNotEquals(0, list.size());
+    }
+
+    @Test
+    public void testSelectBoardList() {
+        // given
+        int totalCnt = boardDAO.selectTotalCnt(null, null);
+        int postSize = 10;
+        Pagination pagination = new Pagination(totalCnt, postSize);
+
+        // when
+        List<Board> list = boardDAO.selectBoardList(pagination, 1, null, null);
+
+        // then
+        Assert.assertNotEquals(0, list.size());
+    }
+
+    @Test
+    public void testUpdateBoard() {
         // given
         Board board = new Board();
         board.setTitle("title");
@@ -98,7 +129,7 @@ public class BoardDAOTest {
     }
 
     @Test
-    public void testDeleteBoard() throws Exception {
+    public void testDeleteBoard() {
         // when
         int count = boardDAO.deleteBoard(1L);
 
@@ -108,7 +139,7 @@ public class BoardDAOTest {
     }
 
     @Test
-    public void testUpdateBoardHit() throws Exception {
+    public void testUpdateBoardHit() {
         // given
         Board board = boardDAO.selectBoard(3L);
         Long hitBefore = board.getHit();
