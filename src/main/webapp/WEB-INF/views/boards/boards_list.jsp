@@ -5,6 +5,7 @@
     <%-- 공통헤더 시작 --%>
     <%@ include file="/WEB-INF/views/common/header.jsp"%>
     <%-- 공통헤더 끝 --%>
+    <title>Board List</title>
 </head>
 
 <body>
