@@ -25,7 +25,8 @@ public class UserServiceImpl implements UserService {
         try {
             if(dbUser.getId() != null && (SecureUtil.sha256Encoding(user.getPwd()).equals(dbUser.getPwd())))
                 result = true;
-        } catch (NoSuchAlgorithmException e) {
+
+        } catch (NoSuchAlgorithmException e){
             e.printStackTrace();
         }
         return result;
@@ -34,12 +35,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public boolean singUp(User user) {
-        boolean result = true;
+        boolean result;
         try {
            userDao.insertUser(user);
-
-        }catch (DataAccessException e)
-        {
+           result = true;
+        }catch (DataAccessException e) {
+            e.printStackTrace();
             result = false;
         }
         return  result;
@@ -48,13 +49,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public String findPwd(User user) {
-        String pwd = null;
+        String pwd;
         try {
             pwd = userDao.selectUserPwd(user.getId(),user.getEmail());
-
-        }catch (DataAccessException e)
-        {
+        }catch (DataAccessException e) {
             e.printStackTrace();
+            pwd = null;
         }
         return pwd;
     }
@@ -62,13 +62,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public String findId(User user) {
-        String id = null;
+        String id;
         try {
             id = userDao.selectUserId(user.getName(),user.getEmail());
-
-        }catch (DataAccessException e)
-        {
+        }catch (DataAccessException e) {
             e.printStackTrace();
+            id = null;
         }
         return id;
     }
