@@ -7,7 +7,6 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -36,16 +35,18 @@ public class UserDAO {
             user= template.queryForObject(UserSQL.selectUser, map,rowMapper);
 
         } catch (DataAccessException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+            throw e;
         }
         return user;
     }
-    public Long insertUser(User user)
+    public void insertUser(User user)
     {
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
-        Number userNo = insert.executeAndReturnKey(parameterSource);
-        return userNo.longValue();
+        try {
+            insert.execute(parameterSource);
+        } catch (DataAccessException e) {
+            throw e;
+        }
     }
 
     public String selectUserId(String name,String email)
@@ -54,13 +55,10 @@ public class UserDAO {
         Map<String,String> map = new HashMap<>();
         map.put("name",name);
         map.put("email",email);
-        try
-        {
+        try {
             userId = template.queryForObject(UserSQL.selectUserId,map,String.class);
-        }catch (IncorrectResultSizeDataAccessException e){
-            e.printStackTrace();
         }catch (DataAccessException e){
-            e.printStackTrace();
+            throw  e;
         }
         return userId;
     }
@@ -70,13 +68,10 @@ public class UserDAO {
         Map<String,String> map = new HashMap<>();
         map.put("id",id);
         map.put("email",email);
-        try
-        {
+        try {
             userPwd = template.queryForObject(UserSQL.selectUserPwd,map,String.class);
-        }catch (IncorrectResultSizeDataAccessException e){
-            e.printStackTrace();
         }catch (DataAccessException e){
-            e.printStackTrace();
+            throw e;
         }
         return userPwd;
     }
