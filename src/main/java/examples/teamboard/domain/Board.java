@@ -12,6 +12,7 @@ public class Board {
     private Long hit;
     private Date regdate;
     private String userId;
+    private String nickname;
     private int categoryNo;
     private Date udate;
     private int commentCnt;

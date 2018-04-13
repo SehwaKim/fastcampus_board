@@ -27,7 +27,9 @@ public class BoardDAO {
     @Autowired
     public BoardDAO(DataSource dataSource) {
         this.jdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-        this.jdbcInsert = new SimpleJdbcInsert(dataSource).withTableName("board").usingGeneratedKeyColumns("board_no");
+        this.jdbcInsert = new SimpleJdbcInsert(dataSource).withTableName("board")
+                .usingGeneratedKeyColumns("board_no")
+                .usingColumns("title", "content", "user_id", "category_no");
     }
 
     public Long insertBoard(Board board){
