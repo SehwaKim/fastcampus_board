@@ -38,6 +38,7 @@ public final class BoardSQL {
             sb.append("and board.").append(searchType).append(" like CONCAT('%', :searchStr, '%')\n");
         }
         sb.append("GROUP BY board.board_no\n");
+        sb.append("order by desc\n");
         sb.append("limit :startIdx, :postSize");
         
         return sb.toString();
