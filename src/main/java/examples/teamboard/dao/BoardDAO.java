@@ -1,5 +1,6 @@
 package examples.teamboard.dao;
 
+import examples.teamboard.common.Pagination;
 import examples.teamboard.domain.Board;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -39,13 +40,32 @@ public class BoardDAO {
         return boardNo.longValue();
     }
 
-    public List<Board> selectBoardList(int categoryNo){
-        String sql = BoardSQL.selectList;
-        Map<String, Integer> map = Collections.singletonMap("categoryNo", categoryNo);
+    public List<Board> selectBoardList(Pagination pagination, int categoryNo, String searchType, String searchStr){
+        String sql;
+        Map<String, Object> map = new HashMap<>();
+        map.put("categoryNo", categoryNo);
+        map.put("startIdx", pagination.getStartIdx());
+        map.put("postSize", pagination.getPostSize());
+
+        if(searchType == null){
+            sql = BoardSQL.selectList;
+
+        }else {
+            sql = BoardSQL.createSelectListSQL(searchType);
+            map.put("searchStr", searchStr);
+        }
 
         List<Board> boardList = jdbcTemplate.query(sql, map, rowMapper);
 
         return boardList;
+    }
+
+    public int selectTotalCnt(String searchType, String searchStr){
+        String sql = BoardSQL.getTotalCnt(searchType);;
+        Map<String, String> map = Collections.singletonMap("searchStr", searchStr);
+        int cnt = jdbcTemplate.queryForObject(sql, map, Integer.class);
+
+        return cnt;
     }
 
     public Board selectBoard(Long boardNo){
@@ -58,8 +78,6 @@ public class BoardDAO {
             return board;
 
         }catch (IncorrectResultSizeDataAccessException ex){
-            ex.printStackTrace();
-
             return null;
         }
     }
