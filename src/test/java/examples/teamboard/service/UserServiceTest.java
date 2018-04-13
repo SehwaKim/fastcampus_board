@@ -1,4 +1,4 @@
-package examples.teamboard.dao;
+package examples.teamboard.service;
 
 import examples.teamboard.config.RootApplicationContextConfig;
 import examples.teamboard.domain.User;
@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -31,8 +32,8 @@ public class UserServiceTest {
         user.setNickName("LoginTestNic");
         userService.singUp(user);
 
-        boolean result =  userService.longIn(user);
-        Assert.assertTrue(result);
+        User user1 =  userService.longIn(user);
+        Assert.assertEquals(user1.getPwd(),user.getPwd());
     }
 
     @Test
@@ -45,9 +46,9 @@ public class UserServiceTest {
         user.setNickName("singUpTestNic");
 
         boolean sing = userService.singUp(user);
-        boolean lonin = userService.longIn(user);
+        User user1 = userService.longIn(user);
 
-        Assert.assertEquals(sing,lonin);
+        Assert.assertEquals(user1.getPwd(),user.getPwd());
     }
 
     @Test
@@ -76,8 +77,6 @@ public class UserServiceTest {
         boolean sing = userService.singUp(user);
 
         String userPwd =  userService.findPwd(user);
-        //TODO
-        //임시비밀번호 생성 기능
         Assert.assertEquals(user.getPwd(), userPwd);
     }
 }
