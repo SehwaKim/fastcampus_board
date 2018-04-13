@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
         User dbUser = userDao.selectUser(user.getId());
         boolean result = false;
         try {
-            if(dbUser.getId() != null && (SecureUtil.sha256Encoding(user.getPwd()).equals(dbUser.getPwd())))
+            if(dbUser != null && (SecureUtil.sha256Encoding(user.getPwd()).equals(dbUser.getPwd())))
                 result = true;
 
         } catch (NoSuchAlgorithmException e){

@@ -9,7 +9,4 @@ public interface UserService {
     public boolean singUp(User user);
     public String findPwd(User user);
     public String findId(User user);
-
-
-
 }
