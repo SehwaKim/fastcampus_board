@@ -38,23 +38,32 @@ public class BoardDAOTest {
     public void testInsertBoard(){
         // when
         Board board = new Board();
-        board.setTitle("title");
-        board.setContent("content");
+        board.setTitle("hello");
+        board.setContent("helloboard");
         board.setUserId("studyman");
         board.setCategoryNo(1);
-        long boardNo = boardDAO.insertBoard(board);
+        Long boardNo = boardDAO.insertBoard(board);
 
         // then
-        Assert.assertEquals(69, boardNo);
+        Board board1 = boardDAO.selectBoard(boardNo);
+        Assert.assertEquals(board.getTitle(), board1.getTitle());
     }
 
     @Test
     public void testSelectBoard() throws Exception {
+        // given
+        Board board = new Board();
+        board.setTitle("hello");
+        board.setContent("helloboard");
+        board.setUserId("studyman");
+        board.setCategoryNo(1);
+        Long boardNo = boardDAO.insertBoard(board);
+
         // when
-        Board board = boardDAO.selectBoard(1L);
+        Board board1 = boardDAO.selectBoard(boardNo);
 
         // then
-        Assert.assertEquals("studyman",board.getUserId());
+        Assert.assertEquals(boardNo, board1.getBoardNo());
     }
 
     @Test
@@ -63,6 +72,8 @@ public class BoardDAOTest {
         List<Board> list = boardDAO.selectBoardList(1);
 
         // then
+        //TODO
+        // 전체 게시글 가져오는 sql 만들고 그거랑 비교해야함
         Assert.assertEquals(68,list.size());
     }
 
@@ -79,11 +90,11 @@ public class BoardDAOTest {
 
         // when
         board1.setContent("Good afternoon!");
-        int count = boardDAO.updateBoard(board1);
+        boardDAO.updateBoard(board1);
 
         // then
         Board board2 = boardDAO.selectBoard(boardNo);
-        Assert.assertEquals("Good afternoon!", board2.getContent());
+        Assert.assertEquals(board1.getContent(), board2.getContent());
     }
 
     @Test
