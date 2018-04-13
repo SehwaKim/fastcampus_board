@@ -19,8 +19,6 @@ import examples.teamboard.service.UserServiceImpl;
 import javax.sql.DataSource;
 import javax.xml.ws.Service;
 import java.security.NoSuchAlgorithmException;
-
-
 @Rollback
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = DBConfig.class)
@@ -46,19 +44,14 @@ public class UserDAOTest {
     }
 
     @Test
-    public void testInsertUser() {
+    public void testInsertUser() throws NoSuchAlgorithmException{
         User user = new User();
-        try {
-            user.setId("Test4");
-            user.setPwd(SecureUtil.sha256Encoding("Test4"));
-            user.setEmail("testEmail4@gmail.com");
-            user.setName("김김4");
-            user.setNickName("김테스트4");
-            userDAO.insertUser(user);
-
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+        user.setId("Test4");
+        user.setPwd(SecureUtil.sha256Encoding("Test4"));
+        user.setEmail("testEmail4@gmail.com");
+        user.setName("김김4");
+        user.setNickName("김테스트4");
+        userDAO.insertUser(user);
 
         String id = userDAO.selectUserId("김또치","testEmail@gmail.com");
         Assert.assertEquals("TestUser2",id);
@@ -72,8 +65,10 @@ public class UserDAOTest {
     }
 
     @Test
-    public  void testSelectUserPwd() {
+    public  void testSelectUserPwd() throws NoSuchAlgorithmException {
+
         String userPwd =  userDAO.selectUserPwd("freewifi","freewifi@naver.com");
-        Assert.assertEquals("freewifi", userPwd);
+       String compPwd =  SecureUtil.sha256Encoding("freewifi");
+        Assert.assertEquals(compPwd, userPwd);
     }
 }
