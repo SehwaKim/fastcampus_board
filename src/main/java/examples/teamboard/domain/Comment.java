@@ -13,4 +13,5 @@ public class Comment {
     private Date regdate;
     private int depth;
     private Long comment_group;
+    private String nickname;
 }

@@ -9,7 +9,8 @@ public final class CommentSQL {
             "    , content\n" +
             "    , regdate\n" +
             "    , depth\n" +
-            " from comment\n" +
+            " from comment left outer join user_info\n" +
+            " on comment.user_id = user_info.id\n" +
             " where board_no = :boardNo\n" +
             " order by comment_group, comment_no\n"+
             " limit :startIdx, :postSize";
