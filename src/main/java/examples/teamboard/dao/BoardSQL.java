@@ -2,17 +2,18 @@ package examples.teamboard.dao;
 
 public final class BoardSQL {
     
-    //TODO selectList, createSelectSearchListSQL() 메서드 쿼리에 userInfo 테이블과 left outer join 해서 유저 정보 가져와야댐.
     public static final String selectList =
             "select board.board_no" +
                     "      , title" +
                     "      , hit" +
                     "      , board.user_id" +
+                    "      , nickname" +
                     "      , category_no" +
                     "      , udate" +
                     "      , count(comment.comment_no) as comment_cnt" +
                     " from board LEFT OUTER JOIN comment" +
                     "    on board.board_no = comment.board_no" +
+                    " LEFT OUTER JOIN user_info u ON board.user_id = u.id" +
                     " where category_no = :categoryNo" +
                     "  GROUP BY board.board_no" +
                     " limit :startIdx :postSize";
@@ -32,11 +33,13 @@ public final class BoardSQL {
         sb.append(", title\n");
         sb.append(", hit\n");
         sb.append(", board.user_id\n");
+        sb.append(", nickname\n");
         sb.append(", category_no\n");
         sb.append(", udate\n");
         sb.append(", count(comment.comment_no) as comment_cnt\n");
         sb.append("from board LEFT OUTER JOIN comment\n");
         sb.append("on board.board_no = comment.board_no\n");
+        sb.append("LEFT OUTER JOIN user_info u ON board.user_id = u.id\n");
         sb.append("where category_no = :categoryNo\n");
         sb.append(searchType).append(" like CONCAT('%', :searchType, '%')\n");
         sb.append("GROUP BY board.board_no\n");
