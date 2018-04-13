@@ -4,6 +4,7 @@ import examples.teamboard.dao.UserDAO;
 import examples.teamboard.domain.User;
 import examples.teamboard.util.SecureUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,18 +13,16 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserDAO userDao;
-
     @Override
     @Transactional(readOnly = true)
-    public boolean longIn(User user) {
-        boolean result;
+    public User longIn(User user) {
         User dbUser = userDao.selectUser(user.getId());
         if(dbUser != null && (user.getPwd().equals(dbUser.getPwd())))
-            result  = true;
-        else
-            result = false;
-
-        return result;
+            user  = dbUser;
+        else{
+            user = null;
+        }
+        return user;
     }
 
     @Override
@@ -36,6 +35,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public String findPwd(User user) {
+        //TODO
+        //임시비밀번호 생성 기능
         String pwd = userDao.selectUserPwd(user.getId(),user.getEmail());
         return pwd;
     }
