@@ -20,8 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceTest {
     @Autowired
     private UserService userService;
-    @Autowired
-    private UserDAO userDAO;
 
     @Test
     public  void testLogin() {
@@ -78,7 +76,8 @@ public class UserServiceTest {
         boolean sing = userService.singUp(user);
 
         String userPwd =  userService.findPwd(user);
-
+        //TODO
+        //임시비밀번호 생성 기능
         Assert.assertEquals(user.getPwd(), userPwd);
     }
 }
