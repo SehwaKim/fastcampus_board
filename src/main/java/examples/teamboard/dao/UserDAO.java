@@ -7,7 +7,6 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -30,22 +29,27 @@ public class UserDAO {
     }
     public User selectUser(String id)
     {
-        User user= null;
+        User user = null;
         Map<String,String> map=Collections.singletonMap("id",id);
         try{
             user= template.queryForObject(UserSQL.selectUser, map,rowMapper);
 
         } catch (DataAccessException e){
-            e.printStackTrace();
-            throw new RuntimeException(e);
+           user = null;
         }
         return user;
     }
-    public Long insertUser(User user)
+    public boolean insertUser(User user)
     {
+        boolean result;
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
-        Number userNo = insert.executeAndReturnKey(parameterSource);
-        return userNo.longValue();
+        try {
+            insert.execute(parameterSource);
+            result = true;
+        } catch (DataAccessException e) {
+            result = false;
+        }
+        return result;
     }
 
     public String selectUserId(String name,String email)
@@ -54,13 +58,10 @@ public class UserDAO {
         Map<String,String> map = new HashMap<>();
         map.put("name",name);
         map.put("email",email);
-        try
-        {
+        try {
             userId = template.queryForObject(UserSQL.selectUserId,map,String.class);
-        }catch (IncorrectResultSizeDataAccessException e){
-            e.printStackTrace();
         }catch (DataAccessException e){
-            e.printStackTrace();
+           userId = null;
         }
         return userId;
     }
@@ -70,13 +71,10 @@ public class UserDAO {
         Map<String,String> map = new HashMap<>();
         map.put("id",id);
         map.put("email",email);
-        try
-        {
+        try {
             userPwd = template.queryForObject(UserSQL.selectUserPwd,map,String.class);
-        }catch (IncorrectResultSizeDataAccessException e){
-            e.printStackTrace();
         }catch (DataAccessException e){
-            e.printStackTrace();
+            userPwd = null;
         }
         return userPwd;
     }

@@ -1,27 +1,24 @@
 package examples.teamboard.dao;
 
 import examples.teamboard.config.DBConfig;
-import examples.teamboard.dao.UserDAO;
 import examples.teamboard.domain.User;
-import org.junit.After;
+import examples.teamboard.util.SecureUtil;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+import examples.teamboard.service.UserService;
+import examples.teamboard.service.UserServiceImpl;
 
 import javax.sql.DataSource;
-import javax.xml.crypto.Data;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import java.util.Map;
-
-
+import javax.xml.ws.Service;
+import java.security.NoSuchAlgorithmException;
 @Rollback
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = DBConfig.class)
@@ -32,8 +29,7 @@ public class UserDAOTest {
     private UserDAO userDAO;
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
         userDAO = new UserDAO(dataSource);
     }
     @Test
@@ -42,42 +38,61 @@ public class UserDAOTest {
         Assert.assertNotNull(dataSource);
     }
     @Test
-    public  void testSelectUser()
-    {
-        User user =  userDAO.selectUser("freewifi");
-        Assert.assertEquals("freewifi", user.getId());
-        //TODO
-        //암호화 해야됨..
-    }
-
-    @Test
-    public void testInsertUser()
-    {
+    public  void testSelectUser() {
         User user = new User();
-        user.setId("testId");
-        user.setPwd("1234");
-        user.setEmail("testEmail@gmail.com");
-        user.setName("김또치");
-        user.setNickName("또치또치");
-       long result = userDAO.insertUser(user);
-       Assert.assertEquals(9,result);
+        user.setId("selecTest");
+        user.setPwd(SecureUtil.sha256Encoding("selecTest"));
+        user.setEmail("selecTest@gmail.com");
+        user.setName("이셀렉");
+        user.setNickName("selecTestNic");
+        boolean inUser = userDAO.insertUser(user);
+
+        User user1 = userDAO.selectUser(user.getId());
+        Assert.assertEquals(user1.getId(), user.getId());
     }
 
     @Test
-    public  void testSelectUserID()
-    {
-        String userId =  userDAO.selectUserId("박전파","freewifi@naver.com");
-        Assert.assertEquals("freewifi", userId);
+    public void testInsertUser() {
+        User user = new User();
+        user.setId("InsertTest");
+        user.setPwd(SecureUtil.sha256Encoding("InsertTest"));
+        user.setEmail("InsertTest@gmail.com");
+        user.setName("김인설");
+        user.setNickName("InsertTestNic");
+        userDAO.insertUser(user);
+
+        String compId = userDAO.selectUserId(user.getName(),user.getEmail());
+        Assert.assertEquals(user.getId(),compId);
+
     }
 
     @Test
-    public  void testSelectUserPwd()
-    {
-        String userPwd =  userDAO.selectUserPwd("freewifi","freewifi@naver.com");
-        Assert.assertEquals("freewifi", userPwd);
+    public  void testSelectUserID() {
+        User user = new User();
+        user.setId("SelecIDTest");
+        user.setPwd(SecureUtil.sha256Encoding("SelecIDTest"));
+        user.setEmail("SelecIDTest@gmail.com");
+        user.setName("김아이디");
+        user.setNickName("SelecIDTestNic");
+        userDAO.insertUser(user);
+
+        String userId =  userDAO.selectUserId(user.getName(),user.getEmail());
+        Assert.assertEquals(user.getId(), userId);
     }
 
+    @Test
+    public  void testSelectUserPwd() throws NoSuchAlgorithmException {
 
+        User user = new User();
+        user.setId("SelecPwdTest");
+        user.setPwd(SecureUtil.sha256Encoding("SelecPwdTest"));
+        user.setEmail("SelecPwdTest@gmail.com");
+        user.setName("김패스");
+        user.setNickName("SelecPwdTestNic");
+        userDAO.insertUser(user);
 
+        String userPwd =  userDAO.selectUserPwd(user.getId(),user.getEmail());
 
+        Assert.assertEquals(user.getPwd(), userPwd);
+    }
 }
