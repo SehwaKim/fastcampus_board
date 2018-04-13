@@ -41,19 +41,12 @@ public class BoardDAO {
     }
 
     public List<Board> selectBoardList(Pagination pagination, int categoryNo, String searchType, String searchStr){
-        String sql;
         Map<String, Object> map = new HashMap<>();
         map.put("categoryNo", categoryNo);
         map.put("startIdx", pagination.getStartIdx());
         map.put("postSize", pagination.getPostSize());
-
-        if(searchType == null){
-            sql = BoardSQL.selectList;
-
-        }else {
-            sql = BoardSQL.createSelectListSQL(searchType);
-            map.put("searchStr", searchStr);
-        }
+        map.put("searchStr", searchStr);
+        String sql = BoardSQL.createSelectListSQL(searchType);
 
         List<Board> boardList = jdbcTemplate.query(sql, map, rowMapper);
 

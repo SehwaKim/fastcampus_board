@@ -1,24 +1,7 @@
 package examples.teamboard.dao;
 
 public final class BoardSQL {
-    
-    public static final String selectList =
-            "select board.board_no" +
-                    "      , title" +
-                    "      , hit" +
-                    "      , board.user_id" +
-                    "      , nickname" +
-                    "      , category_no" +
-                    "      , udate" +
-                    "      , count(comment.comment_no) as comment_cnt" +
-                    " from board LEFT OUTER JOIN comment" +
-                    "    on board.board_no = comment.board_no" +
-                    " LEFT OUTER JOIN user_info u ON board.user_id = u.id" +
-                    " where category_no = :categoryNo" +
-                    "  GROUP BY board.board_no" +
-                    " limit :startIdx, :postSize";
-
-    public static String getTotalCnt(String searchType){
+   public static String getTotalCnt(String searchType){
         StringBuilder sb = new StringBuilder("select count(*) as totalCnt from board\n");
         if(searchType != null){
             if(!isCorrectSearchType(searchType)) {
