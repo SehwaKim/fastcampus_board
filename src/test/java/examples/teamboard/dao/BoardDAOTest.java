@@ -60,7 +60,7 @@ public class BoardDAOTest {
     @Test
     public void testSelectBoardList() throws Exception {
         // when
-        List<Board> list = boardDAO.selectBoardList();
+        List<Board> list = boardDAO.selectBoardList(1);
 
         // then
         Assert.assertEquals(68,list.size());
@@ -94,5 +94,20 @@ public class BoardDAOTest {
         // then
         Board board = boardDAO.selectBoard(1L);
         Assert.assertNull(board);
+    }
+
+    @Test
+    public void testUpdateBoardHit() throws Exception {
+        // given
+        Board board = boardDAO.selectBoard(3L);
+        Long hitBefore = board.getHit();
+
+        // when
+        boardDAO.updateBoardHit(3L);
+
+        // then
+        Board board2 = boardDAO.selectBoard(3L);
+        Long hitAfter = board2.getHit();
+        Assert.assertEquals(hitBefore+1, hitAfter.longValue());
     }
 }
