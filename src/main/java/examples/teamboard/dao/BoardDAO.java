@@ -62,6 +62,14 @@ public class BoardDAO {
         }
     }
 
+    public int updateBoardHit(Long boardNo){
+        String sql = BoardSQL.updateBoardHit;
+        Map<String, Long> map = Collections.singletonMap("boardNo", boardNo);
+        int count = jdbcTemplate.update(sql, map);
+
+        return count;
+    }
+
     public int updateBoard(Board board){
         String sql = BoardSQL.updateBoard;
         SqlParameterSource namedParameters = new BeanPropertySqlParameterSource(board);
