@@ -42,6 +42,7 @@ public class BoardController {
         modelMap.addAttribute("hasPrev", pagination.hasPrev());
         modelMap.addAttribute("hasNext", pagination.hasNext());
         modelMap.addAttribute("page", page);
+        modelMap.addAttribute("categoryNo", categoryNo);
         modelMap.addAttribute("startPage", pagination.getStartPage());
         modelMap.addAttribute("endPage", pagination.getEndPage());
         modelMap.addAttribute("searchType", searchType);
@@ -55,7 +56,7 @@ public class BoardController {
     @GetMapping("/writeform")
     public String writeForm() {
 
-        return "boards/boards_writeform";
+        return "boards/board_writeform";
     }
     
 //    게시글 등록
@@ -86,7 +87,8 @@ public class BoardController {
     @GetMapping("/{boardNo}")
     public String boardDetail(@PathVariable("boardNo") long boardNo, @RequestParam int categoryNo
             , @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "1") int commentPage
-            , Model model) {
+            , @RequestParam(name = "searchType", defaultValue = "title") String searchType
+            , @RequestParam(name = "searchStr", defaultValue = "") String searchStr, Model model) {
 
         Board board = boardService.getBoard(boardNo);
     
@@ -98,6 +100,9 @@ public class BoardController {
         model.addAttribute("board", board);
         model.addAttribute("categoryNo", categoryNo);
         model.addAttribute("commentList", commentList);
+        model.addAttribute("page", page);
+        model.addAttribute("searchType", searchType);
+        model.addAttribute("searchStr", searchStr);
 
 
         return "boards/board_view";
