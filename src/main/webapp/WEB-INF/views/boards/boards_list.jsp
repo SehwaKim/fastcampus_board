@@ -52,7 +52,9 @@
                         <c:forEach items="${boardList}" var="b">
                             <tr>
                                 <td>${b.boardNo}</td>
-                                <td><a href="/boards/${b.boardNo}">${b.title}</a></td>
+                                <td>
+                                    <a href="/boards/${b.boardNo}?categoryNo=${categoryNo}&page=${page}&searchType=${searchType}&searchStr=${searchStr}">${b.title}</a>
+                                </td>
                                 <td>${b.nickname}</td>
                                 <td>${b.udate}</td>
                                 <td>${b.hit}</td>
@@ -88,12 +90,12 @@
             <div align="center">
                 <form class="form-inline" method="get" action="/boards">
                     <div class="form-group">
-                        <select class="form-control" name="searchType">
-                            <option value="title" selected>Title</option>
-                            <option value="content">Content</option>
+                        <select class="form-control" name="searchType" id="inputSearchType">
+                            <option value="title" <c:if test="${searchType == title}">selected</c:if>>Title</option>
+                            <option value="content" <c:if test="${searchType == content}">selected</c:if>>Content</option>
                         </select>
                         <label for="inputSearchStr" class="sr-only">searchStr</label>
-                        <input type="search" class="form-control" id="inputSearchStr" name="searchStr">
+                        <input type="search" class="form-control" id="inputSearchStr" name="searchStr" value="${searchStr}">
                     </div>
                     <button type="submit" class="btn btn-default">검색</button>
                 </form>
