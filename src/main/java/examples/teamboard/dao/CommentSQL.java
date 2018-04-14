@@ -7,7 +7,8 @@ public final class CommentSQL {
     public static final String selectList = "select comment_no" +
             "    , user_id\n" +
             "    , content\n" +
-            "    , regdate\n" +
+            "    , comment.regdate\n" +
+            "    , nickname\n"+
             "    , depth\n" +
             " from comment left outer join user_info\n" +
             " on comment.user_id = user_info.id\n" +
