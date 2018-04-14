@@ -37,7 +37,6 @@ public class CommentServiceTest {
     public void testGetComments() {
         
         Pagination pagination = new Pagination(0, 5);
-        pagination.setStartIdx(0);
     
         List<Comment> comments = commentService.getComments(1, pagination);
         

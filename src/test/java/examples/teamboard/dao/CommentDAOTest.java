@@ -39,7 +39,6 @@ public class CommentDAOTest {
     public void testSelectCommentList() {
         int postSize = 10;
         Pagination pagination = new Pagination(0, postSize);
-        pagination.setStartIdx(0);
         
         List<Comment> commentList = commentDAO.selectList(1L, pagination);
         assertNotEquals(0, commentList.size());

@@ -2,7 +2,7 @@ package examples.teamboard.common;
 
 public class Pagination {
     private int totalPageCnt; // 총 페이지 수
-    private int pageSize = 5; // 한 화면에 보일 페이지 수
+    private int pageSize; // 한 화면에 보일 페이지 수
     private int totalCnt; // 총 게시물 수
     private int postSize; // 페이지 당 게시물 수
     private int startIdx; // 페이지 당 시작 게시물 인덱스
@@ -16,12 +16,17 @@ public class Pagination {
     }
 
     public Pagination(int totalCnt, int postSize, int page) {
+        this(totalCnt, postSize, page, 5);
+    }
+    
+    public Pagination(int totalCnt, int postSize, int page, int pageSize) {
+        this.pageSize = pageSize;
         this.totalCnt = totalCnt;
         this.postSize = postSize;
         this.page = page;
         init();
     }
-
+    
     public void init(){
         this.totalPageCnt = (int) Math.ceil(totalCnt*1.0/postSize);
         this.startPage = (page/pageSize)*pageSize+1;
@@ -48,71 +53,35 @@ public class Pagination {
         return totalPageCnt;
     }
 
-    public void setTotalPageCnt(int totalPageCnt) {
-        this.totalPageCnt = totalPageCnt;
-    }
-
     public int getPageSize() {
         return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
     }
 
     public int getTotalCnt() {
         return totalCnt;
     }
 
-    public void setTotalCnt(int totalCnt) {
-        this.totalCnt = totalCnt;
-    }
-
     public int getPostSize() {
         return postSize;
-    }
-
-    public void setPostSize(int postSize) {
-        this.postSize = postSize;
     }
 
     public int getStartIdx() {
         return startIdx;
     }
 
-    public void setStartIdx(int startIdx) {
-        this.startIdx = startIdx;
-    }
-
     public int getEndIdx() {
         return endIdx;
-    }
-
-    public void setEndIdx(int endIdx) {
-        this.endIdx = endIdx;
     }
 
     public int getStartPage() {
         return startPage;
     }
 
-    public void setStartPage(int startPage) {
-        this.startPage = startPage;
-    }
-
     public int getEndPage() {
         return endPage;
     }
 
-    public void setEndPage(int endPage) {
-        this.endPage = endPage;
-    }
-
     public int getPage() {
         return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
     }
 }
