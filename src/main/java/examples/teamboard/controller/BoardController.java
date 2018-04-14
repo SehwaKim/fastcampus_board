@@ -1,17 +1,40 @@
 package examples.teamboard.controller;
 
 
+import examples.teamboard.common.Pagination;
 import examples.teamboard.domain.Board;
+import examples.teamboard.service.BoardService;
+import examples.teamboard.service.CommentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/boards")
 public class BoardController {
+    @Autowired
+    BoardService boardService;
+    @Autowired
+    CommentService commentService;
 
 //    게시글 리스트
     @GetMapping
-    public String boards(){
+    public String boards(@RequestParam(name = "categoryNo", defaultValue = "1") int categoryNo,
+                         @RequestParam(name = "page", defaultValue = "1") int page,
+                         @RequestParam(name = "searchType", defaultValue = "title") String searchType,
+                         @RequestParam(name = "searchStr", defaultValue = "") String searchStr,
+                         ModelMap modelMap) {
+        //TODO
+        // pagination 인스턴스 생성
+        int totalCnt = boardService.getTotalCnt(searchType, searchStr);
+        Pagination pagination = new Pagination(totalCnt,10, page);
+        // 리스트 가져오는 서비스 호출
+        List<Board> list = boardService.getBoards(pagination, 1, searchType, searchStr);
+        // 리스트를 맵에 전달
+        modelMap.addAttribute("list", list);
 
         return "boards/boards_list";
     }
