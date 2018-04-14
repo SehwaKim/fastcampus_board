@@ -1,14 +1,30 @@
 package examples.teamboard.controller;
 
 
+import examples.teamboard.common.Pagination;
 import examples.teamboard.domain.Board;
+import examples.teamboard.domain.Comment;
+import examples.teamboard.service.BoardService;
+import examples.teamboard.service.CommentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping(value = "/boards")
 public class BoardController {
-
+    
+    private static final int POST_SIZE = 10;
+    
+    @Autowired
+    private BoardService boardService;
+    
+    @Autowired
+    private CommentService commentService;
+    
 //    게시글 리스트
     @GetMapping
     public String boards(){
@@ -46,9 +62,22 @@ public class BoardController {
         return "redirect:/boards/"+board.getBoardNo();
     }
     
-//     게시글 상세보기
-    @GetMapping("/{boardId}")
-    public String boardDetail() {
+    //     게시글 상세보기
+    @GetMapping("/{boardNo}")
+    public String boardDetail(@PathVariable("boardNo") long boardNo, @RequestParam int categoryNo
+            , @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "1") int commentPage
+            , Model model) {
+        
+        Board board = boardService.getBoard(boardNo);
+    
+        int totalCount = commentService.totalCount(boardNo);
+        Pagination pagination = new Pagination(totalCount, POST_SIZE, commentPage);
+        
+        List<Comment> commentList = commentService.getComments(boardNo, pagination);
+
+        model.addAttribute("board", board);
+        model.addAttribute("categoryNo", categoryNo);
+        model.addAttribute("commentList", commentList);
         
         return "boards/board_view";
     }
@@ -61,15 +90,15 @@ public class BoardController {
     }
     
 //    댓글 등록
-    @PostMapping("/boards/{boardId}/comment")
-    public String registComment(@PathVariable(value = "boardId") long boardId) {
+    @PostMapping("/boards/{boardNo}/comment")
+    public String registComment(@PathVariable(value = "boardNo") long boardId) {
     
         return "redirect:/boards/"+boardId;
     }
     
 //    댓글 삭제
-    @DeleteMapping("/boards/{boardId}/comment")
-    public String deleteComment(@PathVariable(value = "boardId") long boardId) {
+    @DeleteMapping("/boards/{boardNo}/comment")
+    public String deleteComment(@PathVariable(value = "boardNo") long boardId) {
     
         return "redirect:/boards/"+boardId;
     }

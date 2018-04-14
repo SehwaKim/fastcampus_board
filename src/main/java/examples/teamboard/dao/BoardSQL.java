@@ -62,9 +62,11 @@ public final class BoardSQL {
             "      , content" +
             "      , hit" +
             "      , board.user_id" +
+            "      , nickname" +
             "      , category_no" +
             "      , udate" +
-            " from board" +
+            " from board left outer join user_info" +
+            " on user_info.id = board.user_id" +
             " where board_no = :boardNo";
 
     public static final String updateBoard =
