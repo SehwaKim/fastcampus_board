@@ -8,6 +8,6 @@ public class IndexController {
 
     @GetMapping(value = "")
     public String index(){
-        return "redirect:/boards";
+        return "redirect:/boards?categoryNo=1";
     }
 }

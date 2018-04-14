@@ -67,12 +67,12 @@ public class CommentDAO {
         return count;
     }
     
-    public Long totalCommentCount(Long boardNo) {
+    public int totalCommentCount(Long boardNo) {
         try {
-            return jdbcTemplate.queryForObject(CommentSQL.totalCommentCount, Collections.singletonMap("boardNo", boardNo), Long.class);
+            return jdbcTemplate.queryForObject(CommentSQL.totalCommentCount, Collections.singletonMap("boardNo", boardNo), Integer.class);
         }
         catch (IncorrectResultSizeDataAccessException e) {
-            return 0L;
+            return 0;
         }
         
     }

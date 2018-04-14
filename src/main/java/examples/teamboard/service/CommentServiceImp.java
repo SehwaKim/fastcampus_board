@@ -36,4 +36,10 @@ public class CommentServiceImp implements CommentService {
         
         return commentDAO.deleteComment(commentNo);
     }
+    
+    @Override
+    public int totalCount(long boardNo) {
+        
+        return commentDAO.totalCommentCount(boardNo);
+    }
 }

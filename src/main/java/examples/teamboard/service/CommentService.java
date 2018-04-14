@@ -13,4 +13,6 @@ public interface CommentService {
     
     public int deleteComment(long commentNo);
 
+    public int totalCount(long boardNo);
+    
 }
