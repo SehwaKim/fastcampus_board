@@ -24,12 +24,12 @@
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <h1 class="page-header">게시글 상세보기</h1><%-- DB에서 내려 줘야댐. --%>
 
-            <form class="form-horizontal" name="viewForm" method="get">
+            <form class="form-horizontal" name="viewForm" action="/boards" method="get">
                 <div id="commentDiv"></div>
                 <div id="methodDiv"></div>
                 <input type="hidden" id="boardNo" name="boardNo" value="${board.boardNo}" />
                 <input type="hidden" name="categoryNo" value="${board.categoryNo}"/>
-                <input type="hidden" name="page" value="${board.categoryNo}"/>
+                <input type="hidden" name="page" value="${page}"/>
                 <input type="hidden" id="commentPage" name="commentPage" value="${commentPage}"/>
                 <input type="hidden" id="searchType" name="searchType" value="${searchType}"/>
                 <input type="hidden" id="searchStr" name="searchStr" value="${searchStr}"/>
@@ -61,8 +61,11 @@
 
                 <div class="form-group">
                     <div class="col-sm-offset-1 col-sm-10" align="right">
-                        <input type="button" class="btn btn-warning" value="수정"/>
-                        <input type="button" class="btn btn-success" value="목록"/>
+                        <c:if test="${user.id == board.userId}" >
+                            <input type="button" class="btn btn-warning" value="수정" onclick="goWriteForm()"/>
+                            <input type="button" class="btn btn-danger" value="삭제" onclick="deleteContent()"/>
+                        </c:if>
+                        <input type="submit" class="btn btn-success" value="목록"/>
                     </div>
                 </div>
             </form>
@@ -85,7 +88,7 @@
                         <td>
                             <c:if test="${ user != null }">
                                 <a href="#"  data-toggle="modal" data-target=".comment_${comment.commentNo}">답글</a>
-                                <c:if test="${user.id eq comment.userId}">&nbsp;|&nbsp;삭제</c:if>
+                                <c:if test="${user.id eq comment.userId}">&nbsp;|&nbsp;<a href="javascript:deleteComment(${comment.commentNo})">삭제</a></c:if>
                             </c:if>
                         </td>
                     </tr>
@@ -175,12 +178,31 @@
             document.getElementById("commentDiv").innerHTML = inputs;
             viewForm.commentGroup.value = commentGroup;
             viewForm.depth.value = 2;
-            //document.getElementById("commentDiv").innerHTML = "<input type='hidden' value='delete' name='_method' />";
+
         }
         viewForm.commentContent.value = content;
 
         viewForm.submit();
     }
 
+    var deleteComment = function (commentNo) {
+        viewForm.action = "/boards/${board.boardNo}/comment/"+commentNo;
+        viewForm.method = "post";
+        document.getElementById("commentDiv").innerHTML = "<input type='hidden' value='delete' name='_method' />";
+        viewForm.submit();
+    }
+
+    var goWriteForm = function () {
+        viewForm.action = "/boards/updateform"
+        viewForm.submit();
+    }
+
+    var deleteContent = function () {
+        if(!confirm("삭제 하시겠습니까?")) return;
+        viewForm.action = "/boards/${board.boardNo}";
+        viewForm.method = "post";
+        document.getElementById("methodDiv").innerHTML = "<input type='hidden' value='delete' name='_method' />";
+        viewForm.submit();
+    }
 </script>
 </html>
