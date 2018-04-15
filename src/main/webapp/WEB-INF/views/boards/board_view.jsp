@@ -97,8 +97,10 @@
                         <td><fmt:formatDate value="${comment.regdate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                         <td>
                             <c:if test="${ user != null && comment.depth > 0 }">
-                                <a href="#"  data-toggle="modal" data-target=".comment_${comment.commentNo}">답글</a>
-                                <c:if test="${user.id eq comment.userId}">&nbsp;|&nbsp;<a href="javascript:deleteComment(${comment.commentNo})">삭제</a></c:if>
+                                <c:if test="${comment.depth == 1}">
+                                    <a href="#"  data-toggle="modal" data-target=".comment_${comment.commentNo}">답글</a>
+                                </c:if>
+                                <c:if test="${user.id eq comment.userId}">${comment.depth == 1 ? '&nbsp;|&nbsp;' : ''}<a href="javascript:deleteComment(${comment.commentNo})">삭제</a></c:if>
                             </c:if>
                         </td>
                     </tr>
@@ -180,7 +182,7 @@
         viewForm.action = "/boards/${board.boardNo}/comment";
         viewForm.method = "post";
         // commentContent
-
+        if(content.trim().length == 0) return;
         var inputs = "<input type='hidden' value='' id='commentContent' name='content' />";
         document.getElementById("commentDiv").innerHTML = inputs;
 

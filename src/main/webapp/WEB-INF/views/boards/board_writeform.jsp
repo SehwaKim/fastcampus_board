@@ -38,7 +38,7 @@
                 <div class="form-group">
                     <label for="nickname" class="col-sm-1 control-label">작성자</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="nickname" name="nickname" value="${user.nickName}" readonly/>
+                        <input type="text" class="form-control" id="nickname" name="nickname" value="${user.nickname}" readonly/>
                     </div>
                 </div>
                 <div class="form-group">
@@ -65,8 +65,18 @@
 </div>
 </body>
 <script>
+
     var regist = function () {
         if(!confirm("등록 하시겠습니까?")) return;
+        if(writeForm.title.value.trim().length == 0) {
+            alert("제목을 입력해주세요.");
+            return;
+        }
+        if(writeForm.content.value.trim() == 0) {
+            alert("내용을 입력해주세요.");
+            return;
+        }
+
         writeForm.method = "post";
         writeForm.submit();
     }

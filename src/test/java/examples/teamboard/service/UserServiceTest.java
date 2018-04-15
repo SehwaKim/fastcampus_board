@@ -29,7 +29,7 @@ public class UserServiceTest {
         user.setPwd(SecureUtil.sha256Encoding("LoginTest"));
         user.setEmail("LoginTest@gmail.com");
         user.setName("김로그");
-        user.setNickName("LoginTestNic");
+        user.setNickname("LoginTestNic");
         userService.signUp(user);
 
         User user1 =  userService.longIn(user);
@@ -43,7 +43,7 @@ public class UserServiceTest {
         user.setPwd(SecureUtil.sha256Encoding("singUpTest"));
         user.setEmail("singUpTest@gmail.com");
         user.setName("김가입");
-        user.setNickName("singUpTestNic");
+        user.setNickname("singUpTestNic");
 
         boolean sing = userService.signUp(user);
         User user1 = userService.longIn(user);
@@ -58,7 +58,7 @@ public class UserServiceTest {
         user.setPwd(SecureUtil.sha256Encoding("FindId"));
         user.setEmail("FindId@gmail.com");
         user.setName("김아이디");
-        user.setNickName("FindIdNic");
+        user.setNickname("FindIdNic");
         boolean sing = userService.signUp(user);
 
         String userId =  userService.findId(user);
@@ -73,7 +73,7 @@ public class UserServiceTest {
         user.setPwd(SecureUtil.sha256Encoding("FindPwd"));
         user.setEmail("FindPwd@gmail.com");
         user.setName("김패스");
-        user.setNickName("FindPwdNic");
+        user.setNickname("FindPwdNic");
         boolean sing = userService.signUp(user);
 
         String userPwd = userService.findPwd(user);
@@ -87,7 +87,7 @@ public class UserServiceTest {
             user.setPwd(SecureUtil.sha256Encoding("CheckId"));
             user.setEmail("CheckId@gmail.com");
             user.setName("김체크");
-            user.setNickName("CheckIdNic");
+            user.setNickname("CheckIdNic");
             boolean singup = userService.signUp(user);
 
             boolean result =  userService.checkId(user);
