@@ -20,7 +20,7 @@ public final class UserSQL {
             "SELECT count(*)" +
                     " FROM user_info "+
                     " WHERE id = :id";
-    public static final String updatePwd = "UPDATE user_info SET pwd=:pwd WHERE id=:id";
+    public static final String updatePwd = "UPDATE user_info SET pwd = :pwd WHERE id= :id";
     public static final String updateUser ="UPDATE user_info SET pwd=:pwd, nickname=:nickname,email=:email WHERE id=:id";
     private UserSQL() { }
 }

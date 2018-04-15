@@ -1,6 +1,7 @@
 package examples.teamboard.dao;
 
 import examples.teamboard.domain.User;
+import examples.teamboard.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
@@ -85,6 +86,11 @@ public class UserDAO {
             userPwd = null;
         }
         return userPwd;
+    }
+    public int updatePwd(User user)
+    {
+       SqlParameterSource param = new BeanPropertySqlParameterSource(user);
+       return template.update(UserSQL.updatePwd,param);
     }
 
 }

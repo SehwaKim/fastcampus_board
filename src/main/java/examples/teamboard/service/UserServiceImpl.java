@@ -8,6 +8,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.rmi.CORBA.UtilDelegate;
+import java.util.UUID;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -29,16 +32,32 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public boolean signUp(User user) {
         boolean result = userDao.insertUser(user);
+        System.out.println("service return : " + result);
         return  result;
     }
 
     @Override
     @Transactional(readOnly = true)
     public String findPwd(User user) {
-        //TODO
-        //임시비밀번호 생성 기능
         String pwd = userDao.selectUserPwd(user.getId(),user.getEmail());
         return pwd;
+    }
+
+    @Override
+    public String updateUser(User user) {
+        //TODO
+        //유저정보 수정
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public String changePwd(User user) {
+        String uuid = UUID.randomUUID().toString();
+        uuid= uuid.substring(0,5);
+        user.setPwd(SecureUtil.sha256Encoding(uuid));
+        userDao.updatePwd(user);
+        return uuid;
     }
 
     @Override

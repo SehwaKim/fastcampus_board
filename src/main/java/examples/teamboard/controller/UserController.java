@@ -49,6 +49,7 @@ public class UserController {
             user = userService.longIn(user);
 
             if(user != null){
+                user.setPwd(null);
                 session.setAttribute("user",user);
             }
             else
@@ -114,11 +115,13 @@ public class UserController {
         return "user/user_findpwd"; //로그인패이지 재활용...
     }
     
-    //    비밀번호 찾기
+    //    임시비밀번호 발급
     @PostMapping("/findpwd")
     public String findpwd(@ModelAttribute User user,ModelMap parameter) {
         String pwd;
-        pwd = userService.findPwd(user);
+        System.out.println(user.getId()+":" + user.getEmail());
+        pwd = userService.changePwd(user);
+        System.out.println(pwd);
         if(pwd == null){
             parameter.addAttribute("result","err");
             return "user/user_findpwd";

@@ -45,7 +45,7 @@ public class UserDAOTest {
         user.setPwd(SecureUtil.sha256Encoding("selecTest"));
         user.setEmail("selecTest@gmail.com");
         user.setName("이셀렉");
-        user.setNickName("selecTestNic");
+        user.setNickname("selecTestNic");
         boolean inUser = userDAO.insertUser(user);
 
         User user1 = userDAO.selectUser(user.getId());
@@ -59,7 +59,7 @@ public class UserDAOTest {
         user.setPwd(SecureUtil.sha256Encoding("selecTestCnt"));
         user.setEmail("selecTestCnt@gmail.com");
         user.setName("김카운트");
-        user.setNickName("selecTestCntNic");
+        user.setNickname("selecTestCntNic");
         boolean inUser = userDAO.insertUser(user);
 
         int cnt = userDAO.selectUserCnt(user.getId());
@@ -73,7 +73,7 @@ public class UserDAOTest {
         user.setPwd(SecureUtil.sha256Encoding("InsertTest"));
         user.setEmail("InsertTest@gmail.com");
         user.setName("김인설");
-        user.setNickName("InsertTestNic");
+        user.setNickname("InsertTestNic");
         userDAO.insertUser(user);
 
         String compId = userDAO.selectUserId(user.getName(),user.getEmail());
@@ -88,7 +88,7 @@ public class UserDAOTest {
         user.setPwd(SecureUtil.sha256Encoding("SelecIDTest"));
         user.setEmail("SelecIDTest@gmail.com");
         user.setName("김아이디");
-        user.setNickName("SelecIDTestNic");
+        user.setNickname("SelecIDTestNic");
         userDAO.insertUser(user);
 
         String userId =  userDAO.selectUserId(user.getName(),user.getEmail());
@@ -103,11 +103,25 @@ public class UserDAOTest {
         user.setPwd(SecureUtil.sha256Encoding("SelecPwdTest"));
         user.setEmail("SelecPwdTest@gmail.com");
         user.setName("김패스");
-        user.setNickName("SelecPwdTestNic");
+        user.setNickname("SelecPwdTestNic");
         userDAO.insertUser(user);
 
         String userPwd =  userDAO.selectUserPwd(user.getId(),user.getEmail());
 
         Assert.assertEquals(user.getPwd(), userPwd);
+    }
+
+    @Test
+    public  void testUpdatePwd() {
+        User user = new User();
+        user.setId("selecTest");
+        user.setPwd(SecureUtil.sha256Encoding("selecTest"));
+        user.setEmail("selecTest@gmail.com");
+        user.setName("이업뎃");
+        user.setNickname("selecTestNic");
+        boolean inUser = userDAO.insertUser(user);
+
+        int result =  userDAO.updatePwd(user);
+        Assert.assertEquals(1, result);
     }
 }
