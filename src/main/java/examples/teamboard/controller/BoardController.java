@@ -70,8 +70,7 @@ public class BoardController {
     public String write(@RequestParam(defaultValue = "1") int page
             , @RequestParam(required = false) String searchType, @RequestParam(required = false) String searchStr
             , @RequestParam(defaultValue = "1") int categoryNo
-            , String title, String content, String nickname
-            , HttpSession session, Model model) {
+            , String title, String content, HttpSession session) {
     
         User user = (User) session.getAttribute("user");
     
@@ -109,7 +108,7 @@ public class BoardController {
     @PutMapping("/{boardNo}")
     public String update(@PathVariable("boardNo") long boardNo, @RequestParam(defaultValue = "1") int page
             , @RequestParam(required = false) String searchType, @RequestParam(required = false) String searchStr
-            , Board board, Model model) {
+            , Board board) {
     
         board.setBoardNo(boardNo);
     

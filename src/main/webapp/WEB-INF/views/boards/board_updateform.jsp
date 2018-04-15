@@ -75,7 +75,6 @@
 </body>
 <script>
     var update = function () {
-        if(!confirm("수정 하시겠습니까?")) return;
         if(updateForm.title.value.trim().length == 0) {
             alert("제목을 입력해주세요.");
             return;
@@ -84,6 +83,7 @@
             alert("내용을 입력해주세요.");
             return;
         }
+        if(!confirm("수정 하시겠습니까?")) return;
 
         updateForm.action = "/boards/"+${board.boardNo};
         updateForm.method = "post";
