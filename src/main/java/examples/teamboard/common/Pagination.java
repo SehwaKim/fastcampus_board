@@ -29,7 +29,7 @@ public class Pagination {
     
     public void init(){
         this.totalPageCnt = (int) Math.ceil(totalCnt*1.0/postSize);
-        this.startPage = (page/pageSize)*pageSize+1;
+        this.startPage = (page/(pageSize+1))*pageSize+1;
         this.endPage = startPage+pageSize-1;
         if(endPage > totalPageCnt){
             endPage = totalPageCnt;
@@ -83,5 +83,24 @@ public class Pagination {
 
     public int getPage() {
         return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    @Override
+    public String toString() {
+        return "Pagination{" +
+                "totalPageCnt=" + totalPageCnt +
+                ", pageSize=" + pageSize +
+                ", totalCnt=" + totalCnt +
+                ", postSize=" + postSize +
+                ", startIdx=" + startIdx +
+                ", endIdx=" + endIdx +
+                ", startPage=" + startPage +
+                ", endPage=" + endPage +
+                ", page=" + page +
+                '}';
     }
 }

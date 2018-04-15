@@ -12,7 +12,7 @@ public class PaginationTest {
     public void testStartIdx() {
         Pagination pagination = new Pagination(58, 10, 3);
     
-        assertEquals(20, pagination.getStartIdx());
+        assertEquals(20L, pagination.getStartIdx());
     }
     
     @Test
@@ -35,6 +35,9 @@ public class PaginationTest {
         
         assertEquals(1, pagination.getStartPage());
         assertFalse(pagination.hasPrev());
+    
+        pagination = new Pagination(58, 10, 5);
+        assertEquals(1, pagination.getStartPage());
     }
     
     @Test

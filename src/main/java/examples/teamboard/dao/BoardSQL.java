@@ -1,9 +1,11 @@
 package examples.teamboard.dao;
 
+import examples.teamboard.util.StringUtil;
+
 public final class BoardSQL {
    public static String getTotalCnt(String searchType){
         StringBuilder sb = new StringBuilder("select count(*) as totalCnt from board\n");
-        if(searchType != null){
+        if(StringUtil.isNotBlank(searchType)){
             if(!isCorrectSearchType(searchType)) {
                 throw new IllegalArgumentException("Incorrect SearchType :: " + searchType);
             }
@@ -31,14 +33,14 @@ public final class BoardSQL {
         sb.append("on board.board_no = comment.board_no\n");
         sb.append("LEFT OUTER JOIN user_info u ON board.user_id = u.id\n");
         sb.append("where category_no = :categoryNo\n");
-        if(searchType != null) {
+        if(StringUtil.isNotBlank(searchType)) {
             if(!isCorrectSearchType(searchType)) {
                 throw new IllegalArgumentException("Incorrect SearchType :: " + searchType);
             }
             sb.append("and board.").append(searchType).append(" like CONCAT('%', :searchStr, '%')\n");
         }
         sb.append("GROUP BY board.board_no\n");
-        sb.append("order by desc\n");
+        sb.append("desc\n");
         sb.append("limit :startIdx, :postSize");
         
         return sb.toString();
@@ -62,9 +64,11 @@ public final class BoardSQL {
             "      , content" +
             "      , hit" +
             "      , board.user_id" +
+            "      , nickname" +
             "      , category_no" +
             "      , udate" +
-            " from board" +
+            " from board left outer join user_info" +
+            " on user_info.id = board.user_id" +
             " where board_no = :boardNo";
 
     public static final String updateBoard =

@@ -9,9 +9,9 @@ public class Comment {
     private Long commentNo;
     private Long boardNo;
     private String content;
-    private String user_id;
+    private String userId;
     private Date regdate;
     private int depth;
-    private Long comment_group;
+    private Long commentGroup = 0L;
     private String nickname;
 }
