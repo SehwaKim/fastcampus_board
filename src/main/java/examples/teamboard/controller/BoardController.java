@@ -33,8 +33,8 @@ public class BoardController {
     @GetMapping
     public String boards(@RequestParam(name = "categoryNo", defaultValue = "1") int categoryNo,
                          @RequestParam(name = "page", defaultValue = "1") int page,
-                         @RequestParam(name = "searchType", defaultValue = "title") String searchType,
-                         @RequestParam(name = "searchStr", defaultValue = "") String searchStr,
+                         @RequestParam(name = "searchType", required = false) String searchType,
+                         @RequestParam(name = "searchStr", required = false) String searchStr,
                          ModelMap modelMap) {
 
         int totalCnt = boardService.getTotalCnt(searchType, searchStr);

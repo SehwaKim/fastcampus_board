@@ -7,14 +7,9 @@
     <%@ include file="/WEB-INF/views/common/header.jsp"%>
     <%-- 공통헤더 끝 --%>
     <title>Board List</title>
-    <script>
-        function colorOnPage(){
-            document.getElementById(${page}).setAttribute("class", "active");
-        }
-    </script>
 </head>
 
-<body onload="colorOnPage()">
+<body>
 
 <%-- 탑 네이게이션 시작 --%>
 <%@include file="/WEB-INF/views/common/top_nav.jsp"%>
@@ -53,7 +48,7 @@
                             <tr>
                                 <td>${b.boardNo}</td>
                                 <td>
-                                    <a href="/boards/${b.boardNo}?categoryNo=${categoryNo}&page=${page}&searchType=${searchType}&searchStr=${searchStr}">${b.title}</a>
+                                    <a href="/boards/${b.boardNo}?categoryNo=${categoryNo}&page=${page}&searchType=${searchType}&searchStr=${searchStr}">${b.title}&nbsp;[${b.commentCnt}]</a>
                                 </td>
                                 <td>${b.nickname}</td>
                                 <td>${b.udate}</td>
@@ -66,19 +61,19 @@
             </div>
             <nav align="center">
                 <ul class="pagination">
-                    <c:if test="${hasPrev}">
+                    <c:if test="${pagination.hasPrev()}">
                         <li>
                             <a href="/boards?page=${startPage-1}&searchType=${searchType}&searchStr=${searchStr}" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
                     </c:if>
-                    <c:forEach begin="${startPage}" end="${endPage}" step="1" var="num">
-                      <li id="${num}">
+                    <c:forEach begin="${pagination.startPage}" end="${pagination.endPage}" step="1" var="num">
+                      <li id="${num}" <c:if test="${page == num}">class="active"</c:if>>
                           <a href="/boards?page=${num}&searchType=${searchType}&searchStr=${searchStr}">${num}</a>
                       </li>
                     </c:forEach>
-                    <c:if test="${hasNext}">
+                    <c:if test="${pagination.hasNext()}">
                         <li>
                             <a href="/boards?page=${endPage+1}&searchType=${searchType}&searchStr=${searchStr}" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
