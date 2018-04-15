@@ -8,7 +8,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;스터디 게시판</a>
+                <a class="navbar-brand" href="/boards"><span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;스터디 게시판</a>
             </div>
 
             <div id="navbar" class="navbar-collapse collapse">

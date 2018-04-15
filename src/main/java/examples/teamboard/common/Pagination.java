@@ -84,4 +84,23 @@ public class Pagination {
     public int getPage() {
         return page;
     }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    @Override
+    public String toString() {
+        return "Pagination{" +
+                "totalPageCnt=" + totalPageCnt +
+                ", pageSize=" + pageSize +
+                ", totalCnt=" + totalCnt +
+                ", postSize=" + postSize +
+                ", startIdx=" + startIdx +
+                ", endIdx=" + endIdx +
+                ", startPage=" + startPage +
+                ", endPage=" + endPage +
+                ", page=" + page +
+                '}';
+    }
 }
