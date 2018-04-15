@@ -9,6 +9,6 @@ public class User {
     private String id;
     private String pwd;
     private String email;
-    private String nickName;
+    private String nickname;
     private String name;
 }
