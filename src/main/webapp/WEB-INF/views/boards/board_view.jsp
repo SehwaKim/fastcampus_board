@@ -142,10 +142,12 @@
             <%--댓글 페이징 끝 --%>
             <%-- 댓글 작성 --%>
             <div align="center">
+            <c:if test="${user != null}">
                 <form class="form-inline" name="commentForm" method="post" action="/boards/${board.boardNo}/comment">
                     <input type="text" class="form-control" style="width: 80%;" id="commentContent" name="commentContent" value="" placeholder="댓글 작성">
                     <input type="button" class="btn btn-warning" style="width: 10%;" onclick="regsitComment(0, commentForm.commentContent.value)" value="입력" />
                 </form>
+            </c:if>
             </div>
             <%-- 댓글 작성 끝 --%>
         <%-- 본문 끝 --%>

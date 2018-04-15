@@ -7,9 +7,14 @@
     <%@ include file="/WEB-INF/views/common/header.jsp"%>
     <%-- 공통헤더 끝 --%>
     <title>Board List</title>
+    <script>
+        function colorOnPage(){
+            document.getElementById(${page}).setAttribute("class", "active");
+        }
+    </script>
 </head>
 
-<body>
+<body onload="colorOnPage()">
 
 <%-- 탑 네이게이션 시작 --%>
 <%@include file="/WEB-INF/views/common/top_nav.jsp"%>
@@ -23,7 +28,6 @@
         <%-- 본문 시작 --%>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <h1 class="page-header">자유게시판</h1><%-- DB에서 내려 줘야댐. --%>
-            <button class="btn btn-default" type="submit" onclick="location.href='/boards/writeform'">글쓰기</button>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <colgroup>
@@ -58,6 +62,11 @@
                     </c:if>
                     </tbody>
                 </table>
+            </div>
+            <div align="right">
+            <c:if test="${user == null}">
+                <a href="/boards/writeform?categoryNo=${categoryNo}&page=${page}&searchType=${searchType}&searchStr=${searchStr}"><input type="button" class="btn btn-warning" value="글쓰기" /></a>
+            </c:if>
             </div>
             <nav align="center">
                 <ul class="pagination">

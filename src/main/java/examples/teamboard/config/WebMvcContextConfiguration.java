@@ -40,7 +40,7 @@ public class WebMvcContextConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginInterceptor())
-                .addPathPatterns("/boads/writeform")
-                .addPathPatterns("/boads/updateform");
+                .addPathPatterns("/boards/writeform/**")
+                .addPathPatterns("/boards/updateform/**");
     }
 }
