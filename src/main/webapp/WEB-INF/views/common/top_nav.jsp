@@ -19,6 +19,7 @@
                         <li><a href="/user/signup">회원가입</a></li>
                     </ul>
                 </c:if>
+                <%-- 로그인 안했을때만 노출 끝 --%>
 
                 <%-- 로그인 했을때만 노출 시작 --%>
                 <c:if test="${user != null}">
