@@ -47,7 +47,6 @@
                         <textarea class="form-control" rows="10" id="content" name="content"></textarea>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <div class="col-sm-offset-1 col-sm-10" align="right">
                         <input type="button" class="btn btn-warning" value="등록" onclick="regist()"/>
@@ -67,6 +66,14 @@
 <script>
 
     var regist = function () {
+        if(document.getElementById("title").value == ""){
+            alert("제목을 입력해주십시오");
+            return false;
+        }
+        if(document.getElementById("content").value == ""){
+            alert("내용을 입력해주십시오");
+            return false;
+        }
         if(!confirm("등록 하시겠습니까?")) return;
         if(writeForm.title.value.trim().length == 0) {
             alert("제목을 입력해주세요.");
