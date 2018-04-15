@@ -25,8 +25,10 @@ public class CommentServiceImp implements CommentService {
     @Override
     @Transactional
     public long registComment(Comment comment) {
-        Long commentNo = commentDAO.insertComment(comment);
-        commentDAO.updateCommentGroup(commentNo);
+        long commentNo = commentDAO.insertComment(comment);
+        long commentGroup = comment.getCommentGroup();
+        if(commentGroup == 0) commentGroup = commentNo;
+        commentDAO.updateCommentGroup(commentNo, commentGroup, comment.getDepth());
         return commentNo;
     }
     

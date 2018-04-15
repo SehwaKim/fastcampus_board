@@ -4,15 +4,17 @@ package examples.teamboard.controller;
 import examples.teamboard.common.Pagination;
 import examples.teamboard.domain.Board;
 import examples.teamboard.domain.Comment;
+import examples.teamboard.domain.User;
 import examples.teamboard.service.BoardService;
 import examples.teamboard.service.CommentService;
+import examples.teamboard.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -51,79 +53,157 @@ public class BoardController {
     
 //    게시글 쓰기페이지 이동
     @GetMapping("/writeform")
-    public String writeForm() {
-
+    public String writeForm(@RequestParam(defaultValue = "1") int categoryNo
+            , @RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String searchType
+            , @RequestParam(required = false) String searchStr, Model model) {
+    
+        model.addAttribute("page", page);
+        model.addAttribute("categoryNo", categoryNo);
+        model.addAttribute("searchType", searchType);
+        model.addAttribute("searchStr", searchStr);
+        
         return "boards/board_writeform";
     }
     
 //    게시글 등록
     @PostMapping
-    public String write() {
+    public String write(@RequestParam(defaultValue = "1") int page
+            , @RequestParam(required = false) String searchType, @RequestParam(required = false) String searchStr
+            , @RequestParam(defaultValue = "1") int categoryNo
+            , String title, String content, String nickname
+            , HttpSession session, Model model) {
+    
+        User user = (User) session.getAttribute("user");
+    
+        Board board = new Board();
+        board.setTitle(title);
+        board.setContent(content);
+        board.setUserId(user.getId());
+        board.setCategoryNo(categoryNo);
         
-        long boardNo = 0; // 등록한 게시글 번호
+        long boardNo = boardService.addBoard(board);
+    
+        String queryParams = createCommentRedirectQueryParams(board.getCategoryNo(), page, 0, searchType, searchStr);
         
-        return "redirect:/boards/"+boardNo;
+        return "redirect:/boards/"+boardNo+queryParams;
     }
     
 //    게시글 수정페이지 이동
     @GetMapping("updateform")
-    public String updateForm() {
+    public String updateForm(@RequestParam Long boardNo, @RequestParam(defaultValue = "1") int categoryNo
+            , @RequestParam(defaultValue = "1") int page, @RequestParam(required = false) String searchType
+            , @RequestParam(required = false) String searchStr, Model model) {
     
+        Board board = boardService.getBoard(boardNo);
+    
+        model.addAttribute("page", page);
+        model.addAttribute("board", board);
+        model.addAttribute("categoryNo", categoryNo);
+        model.addAttribute("searchType", searchType);
+        model.addAttribute("searchStr", searchStr);
+        
         return "boards/board_updateform";
     }
 
 //    게시글 수정
-    @PutMapping
-    public String update(Board board) {
+    @PutMapping("/{boardNo}")
+    public String update(@PathVariable("boardNo") long boardNo, @RequestParam(defaultValue = "1") int page
+            , @RequestParam(required = false) String searchType, @RequestParam(required = false) String searchStr
+            , Board board, Model model) {
+    
+        board.setBoardNo(boardNo);
+    
+        boardService.updateBoard(board);
         
-        return "redirect:/boards/"+board.getBoardNo();
+        String queryParams = createCommentRedirectQueryParams(board.getCategoryNo(), page, 0, searchType, searchStr);
+    
+        return "redirect:/boards/"+boardNo+queryParams;
     }
 
 
     //     게시글 상세보기
     @GetMapping("/{boardNo}")
-    public String boardDetail(@PathVariable("boardNo") long boardNo, @RequestParam int categoryNo
+    public String boardDetail(@PathVariable("boardNo") long boardNo, @RequestParam(defaultValue = "1") int categoryNo
             , @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "1") int commentPage
-            , @RequestParam(name = "searchType", defaultValue = "title") String searchType
-            , @RequestParam(name = "searchStr", defaultValue = "") String searchStr, Model model) {
-
+            , @RequestParam(required = false) String searchType, @RequestParam(required = false) String searchStr
+            , Model model) {
+        
         Board board = boardService.getBoard(boardNo);
     
         int totalCount = commentService.totalCount(boardNo);
         Pagination pagination = new Pagination(totalCount, POST_SIZE, commentPage);
 
         List<Comment> commentList = commentService.getComments(boardNo, pagination);
-
+    
+        model.addAttribute("page", page);
         model.addAttribute("board", board);
         model.addAttribute("categoryNo", categoryNo);
         model.addAttribute("commentList", commentList);
-        model.addAttribute("page", page);
+        model.addAttribute("pagination", pagination);
         model.addAttribute("searchType", searchType);
         model.addAttribute("searchStr", searchStr);
-
-
+        model.addAttribute("commentPage", commentPage);
+    
         return "boards/board_view";
     }
 
     //    게시글 삭제
-    @DeleteMapping
-    public String delete() {
-
-        return "redirect:/boards";
+    @DeleteMapping("/{boardNo}")
+    public String delete(@PathVariable("boardNo") long boardNo, @RequestParam(defaultValue = "1") int categoryNo) {
+    
+        boardService.deleteBoard(boardNo);
+        
+        return "redirect:/boards?categoryNo="+categoryNo;
     }
 
 //    댓글 등록
-    @PostMapping("/boards/{boardNo}/comment")
-    public String registComment(@PathVariable(value = "boardNo") long boardId) {
+    @PostMapping("/{boardNo}/comment")
+    public String registComment(@PathVariable("boardNo") long boardNo, @RequestParam(defaultValue = "1") int categoryNo
+            , @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "1") int commentPage
+            , @RequestParam(required = false) String searchType, @RequestParam(required = false) String searchStr
+            , Comment comment, HttpSession session) {
     
-        return "redirect:/boards/"+boardId;
+        
+        User user = (User) session.getAttribute("user");
+        
+        comment.setUserId(user.getId());
+        commentService.registComment(comment);
+        
+        String queryParams = createCommentRedirectQueryParams(categoryNo, page, commentPage, searchType, searchStr);
+        
+        return "redirect:/boards/"+boardNo+queryParams;
     }
     
-//    댓글 삭제
-    @DeleteMapping("/boards/{boardNo}/comment")
-    public String deleteComment(@PathVariable(value = "boardNo") long boardId) {
-
-        return "redirect:/boards/"+boardId;
+    private String createCommentRedirectQueryParams(int categoryNo, int page, int commentPage
+            , String searchType, String searchStr) {
+        
+        
+        StringBuilder builder = new StringBuilder();
+        builder.append("?");
+        builder.append("categoryNo=").append(categoryNo);
+        builder.append("&").append("page=").append(page);
+        if(commentPage > 0) {
+            builder.append("&").append("commentPage=").append(commentPage);
+        }
+        if(StringUtil.isNotBlank(searchType)) {
+            builder.append("&").append("searchType=").append(searchType);
+            builder.append("&").append("searchStr=").append(searchStr);
+        }
+        return builder.toString();
+    }
+    
+    //    댓글 삭제
+    @DeleteMapping("/{boardNo}/comment/{commentNo}")
+    public String deleteComment(@PathVariable("boardNo") long boardNo, @PathVariable("commentNo") long commentNo
+            , @RequestParam(defaultValue = "1") int categoryNo, @RequestParam(defaultValue = "1") int page
+            , @RequestParam(defaultValue = "1") int commentPage, @RequestParam(required = false) String searchType
+            , @RequestParam(required = false) String searchStr) {
+    
+        commentService.deleteComment(commentNo);
+        
+        String queryParams = createCommentRedirectQueryParams(categoryNo, page, commentPage, searchType, searchStr);
+        
+        return "redirect:/boards/"+boardNo+queryParams;
     }
 
 }

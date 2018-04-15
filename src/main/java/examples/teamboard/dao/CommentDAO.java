@@ -42,10 +42,13 @@ public class CommentDAO {
         return commentNo.longValue();
     }
 
-    public int updateCommentGroup(Long commentNo){
-        String sql = CommentSQL.updateCommentGroup;
-        Map<String, Long> map = Collections.singletonMap("commentNo", commentNo);
-        int count = jdbcTemplate.update(sql, map);
+    public int updateCommentGroup(Long commentNo, Long commentGroup, int depth){
+        String sql = CommentSQL.createUpdateCommentGroupSQL(depth);
+        SqlParameterSource sqlParameterSource = new MapSqlParameterSource()
+                                                    .addValue("commentNo", commentNo)
+                                                    .addValue("commentGroup", commentGroup)
+                                                    .addValue("depth", depth);
+        int count = jdbcTemplate.update(sql, sqlParameterSource);
 
         return count;
     }

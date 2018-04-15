@@ -13,9 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 @Transactional
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -47,7 +45,7 @@ public class CommentServiceTest {
     public void testRegistComments() {
         Comment comment = new Comment();
         comment.setBoardNo(1L);
-        comment.setUser_id("freewifi");
+        comment.setUserId("freewifi");
         comment.setContent("testContent");
     
         Long commentNo = commentService.registComment(comment);
@@ -57,15 +55,35 @@ public class CommentServiceTest {
     
         System.out.println(registComment);
         assertNotNull(registComment);
-        assertEquals(0, Long.compare(commentNo, registComment.getComment_group()));
+        assertEquals(0, Long.compare(commentNo, registComment.getCommentGroup()));
         assertEquals(comment.getContent(), registComment.getContent());
+        assertEquals(1, registComment.getDepth());
+    }
+    
+    @Test
+    public void testRegistReplyComment() {
+        Comment comment = new Comment();
+        comment.setBoardNo(1L);
+        comment.setUserId("freewifi");
+        comment.setContent("testContent");
+        comment.setCommentGroup(5L);
+        comment.setDepth(2);
+    
+        Long commentNo = commentService.registComment(comment);
+        comment.setCommentNo(commentNo);
+    
+        Comment registComment = commentDAO.selectComment(comment);
+        assertNotNull(registComment);
+        assertNotEquals(commentNo, registComment.getCommentGroup());
+        assertEquals(comment.getCommentGroup(), registComment.getCommentGroup());
+        assertEquals(2, registComment.getDepth());
     }
     
     @Test
     public void testDeleteComment() {
         Comment comment = new Comment();
         comment.setBoardNo(1L);
-        comment.setUser_id("freewifi");
+        comment.setUserId("freewifi");
         comment.setContent("testContent");
         
         Long commentNo = commentService.registComment(comment);
