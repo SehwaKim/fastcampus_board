@@ -27,6 +27,7 @@ public class UserDAO {
         insert = new SimpleJdbcInsert(dataSource).withTableName("user_info").usingGeneratedKeyColumns("user_no");
 
     }
+
     public User selectUser(String id)
     {
         User user = null;
@@ -38,6 +39,13 @@ public class UserDAO {
            user = null;
         }
         return user;
+    }
+    public int selectUserCnt(String id)
+    {
+        Map<String,String> map=Collections.singletonMap("id",id);
+        int cnt= template.queryForObject(UserSQL.selectUserCnt, map,Integer.class);
+        return cnt;
+
     }
     public boolean insertUser(User user)
     {

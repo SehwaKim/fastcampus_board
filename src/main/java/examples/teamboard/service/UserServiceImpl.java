@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public boolean singUp(User user) {
+    public boolean signUp(User user) {
         boolean result = userDao.insertUser(user);
         return  result;
     }
@@ -46,5 +46,15 @@ public class UserServiceImpl implements UserService {
     public String findId(User user) {
         String id = userDao.selectUserId(user.getName(),user.getEmail());
         return id;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean checkId(User user) {
+        boolean result = false;
+        int cnt = userDao.selectUserCnt(user.getId());
+        if(cnt == 1)
+            result = true;
+        return result;
     }
 }
