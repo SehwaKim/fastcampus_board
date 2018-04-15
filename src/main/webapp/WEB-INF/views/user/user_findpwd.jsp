@@ -19,11 +19,11 @@
     <h1 class="display-1">비밀번호 찾기</h1>
     <form action="/user/findpwd" method="post">
         <c:choose>
-            <c:when test="${empty visible}">
-                <div class="alert alert-danger" role="alert" style="display:none">해당 정보의 사용자가 없습니다.!</div>
+            <c:when test="${result =='err'}">
+                <div class="alert alert-danger" role="alert">해당 정보의 사용자가 없습니다.!</div>
             </c:when>
             <c:otherwise>
-                <div class="alert alert-danger" role="alert">해당 정보의 사용자가 없습니다.!</div>
+                <div class="alert alert-danger" role="alert" style="display:none">해당 정보의 사용자가 없습니다.!</div>
             </c:otherwise>
         </c:choose>
         <div class="form-group">
