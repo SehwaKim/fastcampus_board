@@ -8,20 +8,16 @@
     <%-- 공통헤더 끝 --%>
     <title>Board List</title>
 </head>
-
 <body>
 
 <%-- 탑 네이게이션 시작 --%>
 <%@include file="/WEB-INF/views/common/top_nav.jsp"%>
 <%-- 탑 네비게이션 끝 --%>
-<%-- --%>
 <div class="container">
-    <div class="bg-success centered text-center" style="margin-top: 30px">
-       ${title} : ${result}
+    <div class="jumbotron mt-3 text-center" style="margin-top: 50px">
+        <p class="lead">${title} : ${result}</p>
     </div>
 </div>
-
-
 <%-- 자바스크립트 임포트 시작 --%>
 <%@include file="/WEB-INF/views/user/user_javascript.jsp"%>
 <%-- 자바스크립트 임포트 끝 --%>

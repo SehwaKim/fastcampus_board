@@ -110,4 +110,18 @@ public class UserDAOTest {
 
         Assert.assertEquals(user.getPwd(), userPwd);
     }
+
+    @Test
+    public  void testUpdatePwd() {
+        User user = new User();
+        user.setId("selecTest");
+        user.setPwd(SecureUtil.sha256Encoding("selecTest"));
+        user.setEmail("selecTest@gmail.com");
+        user.setName("이업뎃");
+        user.setNickname("selecTestNic");
+        boolean inUser = userDAO.insertUser(user);
+
+        int result =  userDAO.updatePwd(user);
+        Assert.assertEquals(1, result);
+    }
 }
