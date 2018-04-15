@@ -14,11 +14,10 @@
             <div id="navbar" class="navbar-collapse collapse">
                 <%-- 로그인 안했을때만 노출 시작 --%>
                 <c:if test="${user == null}">
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/user/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;로그인</a></li>
-                    <li><a href="/user/signup">회원가입</a></li>
-                </ul>
-                <%-- 로그인 안했을때만 노출 끝 --%>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/user/login"><span class="glyphicon glyphicon-log-in"></span>&nbsp;&nbsp;로그인</a></li>
+                        <li><a href="/user/signup">회원가입</a></li>
+                    </ul>
                 </c:if>
 
                 <%-- 로그인 했을때만 노출 시작 --%>
