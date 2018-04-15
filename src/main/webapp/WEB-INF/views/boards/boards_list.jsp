@@ -64,7 +64,7 @@
                 </table>
             </div>
             <div align="right">
-            <c:if test="${user == null}">
+            <c:if test="${user != null}">
                 <a href="/boards/writeform?categoryNo=${categoryNo}&page=${page}&searchType=${searchType}&searchStr=${searchStr}"><input type="button" class="btn btn-warning" value="글쓰기" /></a>
             </c:if>
             </div>
