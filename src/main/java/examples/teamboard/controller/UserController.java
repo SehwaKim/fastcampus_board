@@ -96,17 +96,13 @@ public class UserController {
     //    아이디 찾기
     @PostMapping("/findid")
     public String findid(@ModelAttribute User user,ModelMap parameter) {
-
-        System.out.println(user.getName()+user.getEmail());
         String id;
-        id = userService.findPwd(user);
+        id = userService.findId(user);
         if(id == null){
-            System.out.println(id);
             parameter.addAttribute("result","err");
             return "user/user_findid";
         }else{
-            System.out.println(id);
-            parameter.addAttribute("title","PassWord");
+            parameter.addAttribute("title","아이디");
             parameter.addAttribute("result",id);
         }
         return "user/user_result";
@@ -127,7 +123,7 @@ public class UserController {
             parameter.addAttribute("result","err");
             return "user/user_findpwd";
         }else{
-            parameter.addAttribute("title","PassWord");
+            parameter.addAttribute("title","임시 비밀번호");
             parameter.addAttribute("result",pwd);
         }
         return "user/user_result";
