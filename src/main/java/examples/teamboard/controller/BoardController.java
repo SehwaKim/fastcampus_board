@@ -39,12 +39,9 @@ public class BoardController {
         Pagination pagination = new Pagination(totalCnt,10, page);
         List<Board> boardList = boardService.getBoards(pagination, 1, searchType, searchStr);
 
-        modelMap.addAttribute("hasPrev", pagination.hasPrev());
-        modelMap.addAttribute("hasNext", pagination.hasNext());
         modelMap.addAttribute("page", page);
         modelMap.addAttribute("categoryNo", categoryNo);
-        modelMap.addAttribute("startPage", pagination.getStartPage());
-        modelMap.addAttribute("endPage", pagination.getEndPage());
+        modelMap.addAttribute("pagination", pagination);
         modelMap.addAttribute("searchType", searchType);
         modelMap.addAttribute("searchStr", searchStr);
         modelMap.addAttribute("boardList", boardList);
