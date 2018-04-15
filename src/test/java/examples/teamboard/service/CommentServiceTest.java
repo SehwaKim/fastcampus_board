@@ -96,4 +96,29 @@ public class CommentServiceTest {
         assertNull(deleteComment);
     }
     
+    @Test
+    public void deleteParentCommentTest() {
+        Comment comment = new Comment();
+        comment.setBoardNo(2L);
+        comment.setUserId("studyman");
+        comment.setContent("testContent");
+    
+        long commentNo = commentService.registComment(comment);
+        
+        comment.setCommentGroup(commentNo);
+        comment.setDepth(2);
+        commentService.registComment(comment);
+        commentService.registComment(comment);
+        commentService.registComment(comment);
+    
+        int commentGruopCount = commentDAO.commentGruopCount(comment.getCommentGroup());
+        assertEquals(4, commentGruopCount);
+    
+        int affectCount = commentService.deleteComment(commentNo);
+        assertTrue(affectCount > 0);
+        
+        comment.setCommentNo(commentNo);
+        Comment deleteComment = commentDAO.selectComment(comment);
+        assertEquals(0, deleteComment.getDepth());
+    }
 }

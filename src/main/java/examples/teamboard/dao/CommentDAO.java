@@ -89,5 +89,19 @@ public class CommentDAO {
             return null;
         }
     }
+    
+    public int commentGruopCount(Long commentGroup) {
+        
+        Map<String, Long> param = Collections.singletonMap("commentGroup", commentGroup);
+        
+        return jdbcTemplate.queryForObject(CommentSQL.commentGroupCount, param, Integer.class);
+    }
+    
+    public int deleteParentComment(Long commentNo) {
+    
+        Map<String, Long> param = Collections.singletonMap("commentNo", commentNo);
+        
+        return jdbcTemplate.update(CommentSQL.deleteParentComment, param);
+    }
 
 }
