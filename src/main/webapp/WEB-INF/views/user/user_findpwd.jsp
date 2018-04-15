@@ -16,8 +16,8 @@
 <%-- 탑 네비게이션 끝 --%>
 
 <div class="container-fluid col-md-offset-4 col-md-4">
-    <h1 class="display-1">Sign in</h1>
-    <form action="/user/login" method="post">
+    <h1 class="display-1">비밀번호 찾기</h1>
+    <form action="/user/findpwd" method="post">
         <c:choose>
             <c:when test="${empty visible}">
                 <div class="alert alert-danger" role="alert" style="display:none">해당 정보의 사용자가 없습니다.!</div>
@@ -27,17 +27,14 @@
             </c:otherwise>
         </c:choose>
         <div class="form-group">
-            <input type="text" class="form-control" name="name" placeholder="Name">
+            <input type="text" class="form-control" name="id" placeholder="ID">
         </div>
         <div class="form-group">
-            <input type="email" class="form-control"  name="email" aria-describedby="emailHelp" placeholder="PassWord">
+            <input type="email" class="form-control"  name="email" aria-describedby="emailHelp" placeholder="Email">
         </div>
-
+        &nbsp;
         <div>
-            Find <a class="nav-link" href="/user/findid">Id</a> or <a class="nav-link" href="/user/findpwd">Password</a>
-        </div>
-        <div>
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">확인</button>
         </div>
     </form>
 </div>
