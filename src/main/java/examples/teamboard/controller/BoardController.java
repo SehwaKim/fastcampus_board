@@ -64,8 +64,9 @@ public class BoardController {
     
     //     게시글 상세보기
     @GetMapping("/{boardNo}")
-    public String boardDetail(@PathVariable("boardNo") long boardNo, @RequestParam int categoryNo
+    public String boardDetail(@PathVariable("boardNo") long boardNo, @RequestParam(defaultValue = "1") int categoryNo
             , @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "1") int commentPage
+            , @RequestParam(required = false) String searchType, @RequestParam(required = false) String searchStr
             , Model model) {
         
         Board board = boardService.getBoard(boardNo);
@@ -74,10 +75,12 @@ public class BoardController {
         Pagination pagination = new Pagination(totalCount, POST_SIZE, commentPage);
         
         List<Comment> commentList = commentService.getComments(boardNo, pagination);
-
+    
+        model.addAttribute("page", page);
         model.addAttribute("board", board);
         model.addAttribute("categoryNo", categoryNo);
         model.addAttribute("commentList", commentList);
+        model.addAttribute("pagination", pagination);
         
         return "boards/board_view";
     }

@@ -29,7 +29,7 @@ public class Pagination {
     
     public void init(){
         this.totalPageCnt = (int) Math.ceil(totalCnt*1.0/postSize);
-        this.startPage = (page/pageSize)*pageSize+1;
+        this.startPage = (page/(pageSize+1))*pageSize+1;
         this.endPage = startPage+pageSize-1;
         if(endPage > totalPageCnt){
             endPage = totalPageCnt;

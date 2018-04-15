@@ -26,7 +26,7 @@ public class PaginationTest {
     public void testEndIdx() {
         Pagination pagination = new Pagination(58, 10, 6);
         
-        assertEquals(57L, pagination.getEndIdx());
+        assertEquals(57, pagination.getEndIdx());
     }
     
     @Test
@@ -35,6 +35,9 @@ public class PaginationTest {
         
         assertEquals(1, pagination.getStartPage());
         assertFalse(pagination.hasPrev());
+    
+        pagination = new Pagination(58, 10, 5);
+        assertEquals(1, pagination.getStartPage());
     }
     
     @Test
