@@ -67,7 +67,7 @@ public class CommentDAOTest {
         Comment comment = new Comment();
         comment.setBoardNo(1L);
         comment.setContent("comment content");
-        comment.setUser_id("studyman");
+        comment.setUserId("studyman");
         
         long beforeCommentCount = commentDAO.totalCommentCount(comment.getBoardNo());
         long commentNo = commentDAO.insertComment(comment);
@@ -86,17 +86,18 @@ public class CommentDAOTest {
         Comment comment = new Comment();
         comment.setBoardNo(1L);
         comment.setContent("comment content");
-        comment.setUser_id("studyman");
+        comment.setUserId("studyman");
         
         Long commentNo = commentDAO.insertComment(comment);
-        commentDAO.updateCommentGroup(commentNo);
+        
+        commentDAO.updateCommentGroup(commentNo, commentNo, comment.getDepth());
     
         comment.setCommentNo(commentNo);
         Comment registedComment = commentDAO.selectComment(comment);
         
         assertEquals(1, registedComment.getDepth());
         assertEquals(comment.getContent(), registedComment.getContent());
-        assertEquals(0, Long.compare(commentNo, registedComment.getComment_group()));
+        assertEquals(0, Long.compare(commentNo, registedComment.getCommentGroup()));
     }
     
     @Test
@@ -105,7 +106,7 @@ public class CommentDAOTest {
         // given
         Comment comment = new Comment();
         comment.setBoardNo(1L);
-        comment.setUser_id("studyman");
+        comment.setUserId("studyman");
         comment.setContent("testContent");
         Long commentNo = commentDAO.insertComment(comment);
         long beforeCount = commentDAO.totalCommentCount(comment.getBoardNo());

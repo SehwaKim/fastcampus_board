@@ -1,9 +1,11 @@
 package examples.teamboard.dao;
 
+import examples.teamboard.util.StringUtil;
+
 public final class BoardSQL {
    public static String getTotalCnt(String searchType){
         StringBuilder sb = new StringBuilder("select count(*) as totalCnt from board\n");
-        if(searchType != null){
+        if(StringUtil.isNotBlank(searchType)){
             if(!isCorrectSearchType(searchType)) {
                 throw new IllegalArgumentException("Incorrect SearchType :: " + searchType);
             }
@@ -31,7 +33,7 @@ public final class BoardSQL {
         sb.append("on board.board_no = comment.board_no\n");
         sb.append("LEFT OUTER JOIN user_info u ON board.user_id = u.id\n");
         sb.append("where category_no = :categoryNo\n");
-        if(searchType != null) {
+        if(StringUtil.isNotBlank(searchType)) {
             if(!isCorrectSearchType(searchType)) {
                 throw new IllegalArgumentException("Incorrect SearchType :: " + searchType);
             }

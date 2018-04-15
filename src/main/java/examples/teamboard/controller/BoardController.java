@@ -4,8 +4,10 @@ package examples.teamboard.controller;
 import examples.teamboard.common.Pagination;
 import examples.teamboard.domain.Board;
 import examples.teamboard.domain.Comment;
+import examples.teamboard.domain.User;
 import examples.teamboard.service.BoardService;
 import examples.teamboard.service.CommentService;
+import examples.teamboard.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +15,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -104,8 +107,14 @@ public class BoardController {
         model.addAttribute("pagination", pagination);
         model.addAttribute("searchType", searchType);
         model.addAttribute("searchStr", searchStr);
-
-
+        model.addAttribute("commentPage", commentPage);
+    
+        //TODO  테스트용이니까삭제 해야댐.
+        User user = new User();
+        user.setNickName("스터디맨");
+        user.setId("freewifi");
+        model.addAttribute("user", user);
+        
         return "boards/board_view";
     }
 
@@ -117,17 +126,48 @@ public class BoardController {
     }
 
 //    댓글 등록
-    @PostMapping("/boards/{boardNo}/comment")
-    public String registComment(@PathVariable(value = "boardNo") long boardId) {
+    @PostMapping("/{boardNo}/comment")
+    public String registComment(@PathVariable("boardNo") long boardNo, @RequestParam(defaultValue = "1") int categoryNo
+            , @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "1") int commentPage
+            , @RequestParam(required = false) String searchType, @RequestParam(required = false) String searchStr
+            , Comment comment, HttpSession session) {
     
-        return "redirect:/boards/"+boardId;
+        
+        User user = (User) session.getAttribute("user");
+        // TODO 테스트용. 삭제 해야댐.
+        user = new User();
+        user.setId("studyman");
+        ////////////////////////////////////////////////////////
+    
+        comment.setUserId(user.getId());
+        commentService.registComment(comment);
+        
+        String url = createCommentRedirectUrl(categoryNo, page, commentPage, searchType, searchStr);
+        
+        return "redirect:/boards/"+boardNo+url;
     }
     
-//    댓글 삭제
-    @DeleteMapping("/boards/{boardNo}/comment")
-    public String deleteComment(@PathVariable(value = "boardNo") long boardId) {
+    private String createCommentRedirectUrl(int categoryNo, int page, int commentPage
+            , String searchType, String searchStr) {
+        
+        
+        StringBuilder builder = new StringBuilder();
+        builder.append("?");
+        builder.append("categoryNo=").append(categoryNo);
+        builder.append("&").append("page=").append(page);
+        builder.append("&").append("commentPage=").append(commentPage);
+        if(StringUtil.isNotBlank(searchType)) {
+            builder.append("&").append("searchType=").append(searchType);
+            builder.append("&").append("searchStr=").append(searchStr);
+        }
+        return builder.toString();
+    }
+    
+    //    댓글 삭제
+    @DeleteMapping("/{boardNo}/comment")
+    public String deleteComment(@PathVariable(value = "boardNo") long boardNo) {
 
-        return "redirect:/boards/"+boardId;
+        return "redirect:/boards/"+boardNo;
     }
 
 }
