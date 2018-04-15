@@ -46,8 +46,8 @@
                 <div class="form-group">
                     <label for="udate" class="col-sm-1 control-label">작성일</label>
                     <div class="col-sm-10">
-
-                        <input type="text" class="form-control" id="udate" value="${board.udate}" readonly>
+                        <fmt:formatDate value="${board.udate}" pattern="yyyy-MM-dd HH:mm:ss" var="udate"/>
+                        <input type="text" class="form-control" id="udate" value="${udate}" readonly>
                     </div>
                 </div>
                 <div class="form-group">

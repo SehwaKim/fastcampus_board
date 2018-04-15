@@ -55,7 +55,8 @@
                                     <a href="/boards/${b.boardNo}?categoryNo=${categoryNo}&page=${page}&searchType=${searchType}&searchStr=${searchStr}">${b.title}&nbsp;[${b.commentCnt}]</a>
                                 </td>
                                 <td>${b.nickname}</td>
-                                <td>${b.udate}</td>
+                                <fmt:formatDate value="${b.udate}" pattern="yyyy-MM-dd HH:mm:ss" var="udate"/>
+                                <td>${udate}</td>
                                 <td>${b.hit}</td>
                             </tr>
                         </c:forEach>

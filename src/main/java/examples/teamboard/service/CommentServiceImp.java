@@ -35,8 +35,16 @@ public class CommentServiceImp implements CommentService {
     @Override
     @Transactional
     public int deleteComment(long commentNo) {
+        int affectCount = 0;
         
-        return commentDAO.deleteComment(commentNo);
+        if(commentDAO.commentGruopCount(commentNo) > 1) {
+            affectCount = commentDAO.deleteParentComment(commentNo);
+        }
+        else {
+            affectCount = commentDAO.deleteComment(commentNo);
+        }
+        
+        return affectCount;
     }
     
     @Override
@@ -44,4 +52,5 @@ public class CommentServiceImp implements CommentService {
         
         return commentDAO.totalCommentCount(boardNo);
     }
+    
 }

@@ -48,8 +48,8 @@
                 <div class="form-group">
                     <label for="udate" class="col-sm-1 control-label">작성일</label>
                     <div class="col-sm-10">
-
-                        <input type="text" class="form-control" id="udate" value="${board.udate}" readonly>
+                        <fmt:formatDate value="${board.udate}" pattern="yyyy-MM-dd HH:mm:ss" var="udate"/>
+                        <input type="text" class="form-control" id="udate" value="${udate}" readonly>
                     </div>
                 </div>
                 <div class="form-group">
@@ -82,11 +82,21 @@
                 <tbody>
                 <c:forEach items="${commentList}" var="comment">
                     <tr>
-                        <td>&nbsp;${comment.depth > 1 ? '┗&nbsp;' : ''}${comment.content}</td>
+                        <c:choose>
+                            <c:when test="${comment.depth == 0}">
+                                <td style="font-style: italic">삭제된 댓글 입니다.</td>
+                            </c:when>
+                            <c:when test="${comment.depth == 1}">
+                                <td>&nbsp;${comment.content}</td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>&nbsp;┗&nbsp;${comment.content}</td>
+                            </c:otherwise>
+                        </c:choose>
                         <td>${comment.nickname}</td>
-                        <td>${comment.regdate}</td>
+                        <td><fmt:formatDate value="${comment.regdate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                         <td>
-                            <c:if test="${ user != null }">
+                            <c:if test="${ user != null && comment.depth > 0 }">
                                 <a href="#"  data-toggle="modal" data-target=".comment_${comment.commentNo}">답글</a>
                                 <c:if test="${user.id eq comment.userId}">&nbsp;|&nbsp;<a href="javascript:deleteComment(${comment.commentNo})">삭제</a></c:if>
                             </c:if>

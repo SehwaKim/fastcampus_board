@@ -29,6 +29,14 @@ public final class CommentSQL {
         return builder.toString();
     }
     
+    public static final String deleteParentComment = "update comment set content = ''\n"
+                                                    + ", depth = 0\n"
+                                                    + "where comment_no = :commentNo";
+    
+    public static final String commentGroupCount = "select count(*) as group_cnt\n" +
+                                                    "  from comment\n" +
+                                                    "where comment_group = :commentGroup";
+    
     public static final String deleteComment = "DELETE from comment where comment_no = :commentNo";
     
     public static final String totalCommentCount = "select count(*) as commentCount\n" +

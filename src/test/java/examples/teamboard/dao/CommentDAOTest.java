@@ -120,5 +120,45 @@ public class CommentDAOTest {
         assertEquals(beforeCount - 1, afterCount);
     }
     
+    @Test
+    public void testDeleteParentComment() {
+        Comment comment = new Comment();
+        comment.setBoardNo(2L);
+        comment.setUserId("studyman");
+        comment.setContent("testContent");
+        Long commentNo = commentDAO.insertComment(comment);
+        
+        assertTrue(commentNo > 0);
+    
+        commentDAO.deleteParentComment(commentNo);
+        
+        comment.setCommentNo(commentNo);
+        Comment deleteComment = commentDAO.selectComment(comment);
+        
+        assertEquals(0, deleteComment.getDepth());
+    }
+    
+    @Test
+    public void testCommentGroupCount() {
+        Comment comment = new Comment();
+        comment.setBoardNo(2L);
+        comment.setUserId("studyman");
+        comment.setContent("testContent");
+    
+        long commentNo = commentDAO.insertComment(comment);
+        comment.setCommentGroup(commentNo);
+        commentDAO.updateCommentGroup(commentNo, comment.getCommentGroup(), 1);
+        
+        commentNo = commentDAO.insertComment(comment);
+        commentDAO.updateCommentGroup(commentNo, comment.getCommentGroup(), 2);
+        commentNo = commentDAO.insertComment(comment);
+        commentDAO.updateCommentGroup(commentNo, comment.getCommentGroup(), 2);
+        commentNo = commentDAO.insertComment(comment);
+        commentDAO.updateCommentGroup(commentNo, comment.getCommentGroup(), 2);
+    
+        int commentGruopCount = commentDAO.commentGruopCount(comment.getCommentGroup());
+        assertEquals(4, commentGruopCount);
+    }
+    
 }
 
