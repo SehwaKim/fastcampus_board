@@ -2,7 +2,7 @@ package examples.teamboard.dao;
 
 public final class UserSQL {
     public static final  String selectUser =
-            "select id, pwd" +
+            "select id, pwd, nickname" +
             " from user_info" +
             " WHERE id = :id";
     public static final String insertUser=
