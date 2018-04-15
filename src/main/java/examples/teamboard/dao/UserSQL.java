@@ -16,5 +16,9 @@ public final class UserSQL {
             "select pwd" +
             " from user_info" +
             " WHERE id = :id and email = :email";
+    public static final String selectUserCnt=
+            "select count(*)" +
+                    " from user_info "+
+                    " where id = :id";
     private UserSQL() { }
 }

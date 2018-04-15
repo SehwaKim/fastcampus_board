@@ -30,7 +30,7 @@ public class UserServiceTest {
         user.setEmail("LoginTest@gmail.com");
         user.setName("김로그");
         user.setNickName("LoginTestNic");
-        userService.singUp(user);
+        userService.signUp(user);
 
         User user1 =  userService.longIn(user);
         Assert.assertEquals(user1.getPwd(),user.getPwd());
@@ -45,7 +45,7 @@ public class UserServiceTest {
         user.setName("김가입");
         user.setNickName("singUpTestNic");
 
-        boolean sing = userService.singUp(user);
+        boolean sing = userService.signUp(user);
         User user1 = userService.longIn(user);
 
         Assert.assertEquals(user1.getPwd(),user.getPwd());
@@ -59,7 +59,7 @@ public class UserServiceTest {
         user.setEmail("FindId@gmail.com");
         user.setName("김아이디");
         user.setNickName("FindIdNic");
-        boolean sing = userService.singUp(user);
+        boolean sing = userService.signUp(user);
 
         String userId =  userService.findId(user);
 
@@ -67,16 +67,30 @@ public class UserServiceTest {
     }
 
     @Test
-    public  void testFindPwd() {
+        public  void testFindPwd() {
         User user = new User();
         user.setId("FindPwd");
         user.setPwd(SecureUtil.sha256Encoding("FindPwd"));
         user.setEmail("FindPwd@gmail.com");
         user.setName("김패스");
         user.setNickName("FindPwdNic");
-        boolean sing = userService.singUp(user);
+        boolean sing = userService.signUp(user);
 
-        String userPwd =  userService.findPwd(user);
+        String userPwd = userService.findPwd(user);
         Assert.assertEquals(user.getPwd(), userPwd);
+    }
+
+        @Test
+        public  void testCheckId() {
+            User user = new User();
+            user.setId("CheckId");
+            user.setPwd(SecureUtil.sha256Encoding("CheckId"));
+            user.setEmail("CheckId@gmail.com");
+            user.setName("김체크");
+            user.setNickName("CheckIdNic");
+            boolean singup = userService.signUp(user);
+
+            boolean result =  userService.checkId(user);
+            Assert.assertTrue(result);
     }
 }

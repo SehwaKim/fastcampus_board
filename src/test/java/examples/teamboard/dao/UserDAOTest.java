@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
@@ -49,6 +50,20 @@ public class UserDAOTest {
 
         User user1 = userDAO.selectUser(user.getId());
         Assert.assertEquals(user1.getId(), user.getId());
+    }
+
+    @Test
+    public  void testSelectUserCnt() {
+        User user = new User();
+        user.setId("selecTestCnt");
+        user.setPwd(SecureUtil.sha256Encoding("selecTestCnt"));
+        user.setEmail("selecTestCnt@gmail.com");
+        user.setName("김카운트");
+        user.setNickName("selecTestCntNic");
+        boolean inUser = userDAO.insertUser(user);
+
+        int cnt = userDAO.selectUserCnt(user.getId());
+        Assert.assertEquals(1, cnt);
     }
 
     @Test
