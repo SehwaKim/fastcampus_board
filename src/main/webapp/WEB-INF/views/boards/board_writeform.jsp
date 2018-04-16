@@ -70,7 +70,7 @@
                 <div class="form-group">
                     <label for="image" class="col-sm-1 control-label"></label>
                     <div class="col-sm-10">
-                        <input type="file" class="file" id="image" name="image" onchange="loadname(this,'previewimg')";><br>
+                        <input type="file" class="file" accept=".gif, .jpg, .png" id="image" name="image" onchange="loadname(this,'previewimg')";><br>
                         <img src="about:blank" name="previewimg" id="previewimg" alt="" style="width: 50%; height: auto;">
                     </div>
                 </div>
