@@ -1,0 +1,16 @@
+diff a/src/main/java/examples/teamboard/config/WebMvcContextConfiguration.java b/src/main/java/examples/teamboard/config/WebMvcContextConfiguration.java	(rejected hunks)
+@@ -4,12 +4,9 @@
+ import org.springframework.context.annotation.Bean;
+ import org.springframework.context.annotation.ComponentScan;
+ import org.springframework.context.annotation.Configuration;
+-<<<<<<< HEAD
+-import org.springframework.web.servlet.HandlerInterceptor;
+-import org.springframework.web.servlet.ModelAndView;
+-=======
++
+ import org.springframework.web.multipart.MultipartResolver;
+->>>>>>> b2d303bb083cfc168be56949eb5d4e7d6750a375
++
+ import org.springframework.web.servlet.config.annotation.*;
+ import org.springframework.web.servlet.view.InternalResourceViewResolver;
+ 
