@@ -8,13 +8,19 @@
     <%-- 공통헤더 끝 --%>
     <title>Board List</title>
     <script>
-        function colorOnPage(){
+        function initPage(){
             document.getElementById(${page}).setAttribute("class", "active");
+
+            if(${searchType eq 'content'}){
+                document.getElementById("content").setAttribute("selected", true);
+            }else {
+                document.getElementById("title").setAttribute("selected", true);
+            }
         }
     </script>
 </head>
 
-<body onload="colorOnPage()">
+<body onload="initPage()">
 
 <%-- 탑 네이게이션 시작 --%>
 <%@include file="/WEB-INF/views/common/top_nav.jsp"%>
@@ -96,8 +102,8 @@
                 <form class="form-inline" method="get" action="/boards">
                     <div class="form-group">
                         <select class="form-control" name="searchType" id="inputSearchType">
-                            <option value="title" <c:if test="${searchType == title}">selected</c:if>>Title</option>
-                            <option value="content" <c:if test="${searchType == content}">selected</c:if>>Content</option>
+                            <option id="title" value="title">Title</option>
+                            <option id="content" value="content">Content</option>
                         </select>
                         <label for="inputSearchStr" class="sr-only">searchStr</label>
                         <input type="search" class="form-control" id="inputSearchStr" name="searchStr" value="${searchStr}">
