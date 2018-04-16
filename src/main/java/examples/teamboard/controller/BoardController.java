@@ -13,9 +13,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping(value = "/boards")
@@ -70,11 +77,59 @@ public class BoardController {
     public String write(@RequestParam(defaultValue = "1") int page
             , @RequestParam(required = false) String searchType, @RequestParam(required = false) String searchStr
             , @RequestParam(defaultValue = "1") int categoryNo
-            , String title, String content, String nickname
-            , HttpSession session, Model model) {
-    
+            , String title, String content
+            , @RequestParam("image") MultipartFile file
+            , HttpSession session) {
+
+        // 파일 업로드
+        String fileName = file.getOriginalFilename();
+        Long fileSize = file.getSize();
+
+        System.out.println("filename : "+fileName+", fileSize : "+fileSize);
+
+        StringBuffer sb = new StringBuffer("/tmp/download/");
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH) + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        sb.append(year);
+        sb.append("/");
+        sb.append(month);
+        sb.append("/");
+        sb.append(day);
+        sb.append("/");
+
+        String dir = sb.toString();
+
+        File fileObj = new File(dir);
+        if(!fileObj.exists()){
+            fileObj.mkdirs();
+        }
+
+        UUID uuid = UUID.randomUUID();
+
+        String savefilename = uuid.toString();
+        String savefilepath = dir + savefilename;
+
+        try(InputStream in =  file.getInputStream();
+            FileOutputStream fos = new FileOutputStream(savefilepath);
+            ){
+
+            byte[] buffer = new byte[1024];
+            int readCount = 0;
+
+            while((readCount = in.read(buffer)) != -1){
+                fos.write(buffer, 0, readCount);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         User user = (User) session.getAttribute("user");
-    
+
         Board board = new Board();
         board.setTitle(title);
         board.setContent(content);
@@ -109,7 +164,7 @@ public class BoardController {
     @PutMapping("/{boardNo}")
     public String update(@PathVariable("boardNo") long boardNo, @RequestParam(defaultValue = "1") int page
             , @RequestParam(required = false) String searchType, @RequestParam(required = false) String searchStr
-            , Board board, Model model) {
+            , Board board) {
     
         board.setBoardNo(boardNo);
     

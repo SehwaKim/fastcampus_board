@@ -61,7 +61,7 @@
 
                 <div class="form-group">
                     <div class="col-sm-offset-1 col-sm-10" align="right">
-                        <c:if test="${user.id == board.userId}" >
+                        <c:if test="${sessionScope.user.id == board.userId}" >
                             <input type="button" class="btn btn-warning" value="수정" onclick="goWriteForm()"/>
                             <input type="button" class="btn btn-danger" value="삭제" onclick="deleteContent()"/>
                         </c:if>
@@ -96,11 +96,11 @@
                         <td>${comment.nickname}</td>
                         <td><fmt:formatDate value="${comment.regdate}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
                         <td>
-                            <c:if test="${ user != null && comment.depth > 0 }">
+                            <c:if test="${ sessionScope.user != null && comment.depth > 0 }">
                                 <c:if test="${comment.depth == 1}">
                                     <a href="#"  data-toggle="modal" data-target=".comment_${comment.commentNo}">답글</a>
                                 </c:if>
-                                <c:if test="${user.id eq comment.userId}">${comment.depth == 1 ? '&nbsp;|&nbsp;' : ''}<a href="javascript:deleteComment(${comment.commentNo})">삭제</a></c:if>
+                                <c:if test="${sessionScope.user.id eq comment.userId}">${comment.depth == 1 ? '&nbsp;|&nbsp;' : ''}<a href="javascript:deleteComment(${comment.commentNo})">삭제</a></c:if>
                             </c:if>
                         </td>
                     </tr>
@@ -154,7 +154,7 @@
             <%--댓글 페이징 끝 --%>
             <%-- 댓글 작성 --%>
             <div align="center">
-            <c:if test="${user != null}">
+            <c:if test="${sessionScope.user != null}">
                 <form class="form-inline" name="commentForm" method="post" action="/boards/${board.boardNo}/comment">
                     <input type="text" class="form-control" style="width: 80%;" id="commentContent" name="commentContent" value="" placeholder="댓글 작성">
                     <input type="button" class="btn btn-warning" style="width: 10%;" onclick="regsitComment(0, commentForm.commentContent.value)" value="입력" />
