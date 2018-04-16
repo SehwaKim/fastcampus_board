@@ -2,19 +2,25 @@ package examples.teamboard.service;
 
 import examples.teamboard.common.Pagination;
 import examples.teamboard.dao.BoardDAO;
+import examples.teamboard.dao.FileDAO;
 import examples.teamboard.domain.Board;
+import examples.teamboard.domain.FileDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BoardServiceImpl implements BoardService {
     private BoardDAO boardDAO;
+    private FileDAO fileDAO;
 
-    public BoardServiceImpl(BoardDAO boardDAO) {
+    public BoardServiceImpl(BoardDAO boardDAO, FileDAO fileDAO) {
         this.boardDAO = boardDAO;
+        this.fileDAO = fileDAO;
     }
 
     @Override
@@ -38,8 +44,14 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     @Transactional
-    public Long addBoard(Board board) {
-        return boardDAO.insertBoard(board);
+    public Map<String, Long> addBoard(Board board, FileDTO fileDTO) {
+        Long boardNo = boardDAO.insertBoard(board);
+        fileDTO.setBoardNo(boardNo);
+        Long fileNo = fileDAO.insertFile(fileDTO);
+        Map<String, Long> map = new HashMap<>();
+        map.put("boardNo", boardNo);
+        map.put("fileNo", fileNo);
+        return map;
     }
 
     @Override

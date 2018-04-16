@@ -4,6 +4,7 @@ package examples.teamboard.controller;
 import examples.teamboard.common.Pagination;
 import examples.teamboard.domain.Board;
 import examples.teamboard.domain.Comment;
+import examples.teamboard.domain.FileDTO;
 import examples.teamboard.domain.User;
 import examples.teamboard.service.BoardService;
 import examples.teamboard.service.CommentService;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -83,7 +85,7 @@ public class BoardController {
 
         // 파일 업로드
         String fileName = file.getOriginalFilename();
-        Long fileSize = file.getSize();
+        int fileSize = (int)file.getSize();
 
         System.out.println("filename : "+fileName+", fileSize : "+fileSize);
 
@@ -127,6 +129,11 @@ public class BoardController {
             e.printStackTrace();
         }
 
+        FileDTO fileDTO = new FileDTO();
+        fileDTO.setName(fileName);
+        fileDTO.setSize(fileSize);
+        fileDTO.setPath(savefilepath);
+        fileDTO.setType(file.getContentType());
 
         User user = (User) session.getAttribute("user");
 
@@ -136,7 +143,9 @@ public class BoardController {
         board.setUserId(user.getId());
         board.setCategoryNo(categoryNo);
         
-        long boardNo = boardService.addBoard(board);
+        Map<String, Long> map = boardService.addBoard(board, fileDTO);
+        Long boardNo = map.get("boardNo");
+        Long fileNo = map.get("fileNo");
     
         String queryParams = createCommentRedirectQueryParams(board.getCategoryNo(), page, 0, searchType, searchStr);
         
