@@ -27,13 +27,12 @@
             </c:otherwise>
         </c:choose>
         <div class="form-group">
-            <input type="text" class="form-control" id="loginId" name="id" placeholder="ID" oninput="checkLoginId()">
+            <input type="text" class="form-control" id="loginId" name="id" placeholder="ID" onchange="checkLoginId()">
             <small id="loginIdHelp" class="form-text text-muted" style="display: none;color: #D32F2F">존재하지 않는 아이디 입니다.</small>
         </div>
         <div class="form-group">
             <input type="password" class="form-control" id="loginPwd" name="pwd" placeholder="PassWord">
         </div>
-
         <div>
            Find <a class="nav-link" href="/user/findid">Id</a> or <a class="nav-link" href="/user/findpwd">Password</a>
         </div>
