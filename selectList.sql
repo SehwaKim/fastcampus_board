@@ -103,3 +103,10 @@ UPDATE comment set comment_group = comment_no where comment_no = :comment_no;
 -- 댓글삭제	/boards/{boardId}/comment	DELETE
 DELETE from comment where comment_no = :comment_no;
 
+
+-- cascade 제약조건
+ALTER TABLE file_attch_info
+ADD CONSTRAINT CAS
+FOREIGN KEY ( board_no )
+REFERENCES board ( board_no )
+ON DELETE CASCADE;
