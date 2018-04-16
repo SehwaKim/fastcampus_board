@@ -4,7 +4,7 @@ package examples.teamboard.controller;
 import examples.teamboard.common.Pagination;
 import examples.teamboard.domain.Board;
 import examples.teamboard.domain.Comment;
-import examples.teamboard.domain.FileDTO;
+import examples.teamboard.domain.FileInfo;
 import examples.teamboard.domain.User;
 import examples.teamboard.service.BoardService;
 import examples.teamboard.service.CommentService;
@@ -16,15 +16,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Calendar;
+import java.io.*;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 @Controller
 @RequestMapping(value = "/boards")
@@ -83,57 +78,7 @@ public class BoardController {
             , @RequestParam(name = "image", required = false) MultipartFile file
             , HttpSession session) {
 
-        // 파일 업로드
-        String fileName = file.getOriginalFilename();
-        int fileSize = (int)file.getSize();
 
-        System.out.println("filename : "+fileName+", fileSize : "+fileSize);
-
-        StringBuffer sb = new StringBuffer("/tmp/download/");
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH) + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-
-        sb.append(year);
-        sb.append("/");
-        sb.append(month);
-        sb.append("/");
-        sb.append(day);
-        sb.append("/");
-
-        String dir = sb.toString();
-
-        File fileObj = new File(dir);
-        if(!fileObj.exists()){
-            fileObj.mkdirs();
-        }
-
-        UUID uuid = UUID.randomUUID();
-
-        String savefilename = uuid.toString();
-        String savefilepath = dir + savefilename;
-
-        try(InputStream in =  file.getInputStream();
-            FileOutputStream fos = new FileOutputStream(savefilepath);
-            ){
-
-            byte[] buffer = new byte[1024];
-            int readCount = 0;
-
-            while((readCount = in.read(buffer)) != -1){
-                fos.write(buffer, 0, readCount);
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        FileDTO fileDTO = new FileDTO();
-        fileDTO.setName(fileName);
-        fileDTO.setSize(fileSize);
-        fileDTO.setPath(savefilepath);
-        fileDTO.setType(file.getContentType());
 
         User user = (User) session.getAttribute("user");
 
@@ -143,9 +88,7 @@ public class BoardController {
         board.setUserId(user.getId());
         board.setCategoryNo(categoryNo);
         
-        Map<String, Long> map = boardService.addBoard(board, fileDTO);
-        Long boardNo = map.get("boardNo");
-        Long fileNo = map.get("fileNo");
+        Long boardNo = boardService.addBoard(board, file);
     
         String queryParams = createCommentRedirectQueryParams(board.getCategoryNo(), page, 0, searchType, searchStr);
         
@@ -207,7 +150,7 @@ public class BoardController {
         model.addAttribute("searchType", searchType);
         model.addAttribute("searchStr", searchStr);
         model.addAttribute("commentPage", commentPage);
-    
+
         return "boards/board_view";
     }
 
@@ -268,6 +211,36 @@ public class BoardController {
         String queryParams = createCommentRedirectQueryParams(categoryNo, page, commentPage, searchType, searchStr);
         
         return "redirect:/boards/"+boardNo+queryParams;
+    }
+
+    @GetMapping("/download/{fileNo}")
+    @ResponseBody
+    public void download(@PathVariable(name = "fileNo")Long fileNo,
+                         HttpServletResponse response){
+
+        FileInfo fileInfo = boardService.getFileInfo(fileNo);
+
+        // Content-Disposition, Content-Transfer-Encoding 이 있으면 파일이 다운로드된다.
+        response.setHeader("Content-Disposition", "inline; filename=\"" + fileInfo.getName() + "\";");
+        response.setHeader("Content-Transfer-Encoding", "binary");
+        response.setHeader("Content-Type", fileInfo.getType());
+        response.setHeader("Content-Length", "" + fileInfo.getSize());
+        response.setHeader("Pragma", "no-cache;");
+        response.setHeader("Expires", "-1;");
+
+        // try - with - resources
+        try(
+                FileInputStream fis = new FileInputStream(fileInfo.getPath());
+                OutputStream out = response.getOutputStream();
+        ){
+            int readCount = 0;
+            byte[] buffer = new byte[1024];
+            while((readCount = fis.read(buffer)) != -1){
+                out.write(buffer,0,readCount);
+            }
+        }catch(Exception ex){
+            throw new RuntimeException("file Save Error");
+        }
     }
 
 }
