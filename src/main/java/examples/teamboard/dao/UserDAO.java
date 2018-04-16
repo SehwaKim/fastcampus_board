@@ -18,6 +18,7 @@ import java.util.*;
 
 @Repository
 public class UserDAO {
+
     private NamedParameterJdbcTemplate template;
     private SimpleJdbcInsert insert;
     private RowMapper<User> rowMapper = BeanPropertyRowMapper.newInstance(User.class);
@@ -26,11 +27,10 @@ public class UserDAO {
     public UserDAO(DataSource dataSource) {
         template = new NamedParameterJdbcTemplate(dataSource);
         insert = new SimpleJdbcInsert(dataSource).withTableName("user_info").usingGeneratedKeyColumns("user_no");
-
     }
     public User selectUser(String id)
     {
-        User user = null;
+        User user;
         Map<String,String> map=Collections.singletonMap("id",id);
         try{
             user= template.queryForObject(UserSQL.selectUser, map,rowMapper);
@@ -89,8 +89,14 @@ public class UserDAO {
        SqlParameterSource param = new BeanPropertySqlParameterSource(user);
        return template.update(UserSQL.updatePwd,param);
     }
-    public  int updateUser()
+    public int updateEmail(User user)
     {
-        return 0 ;
+        SqlParameterSource param = new BeanPropertySqlParameterSource(user);
+        return template.update(UserSQL.updateEmail,param);
+    }
+    public  int updateUser(User user)
+    {
+        SqlParameterSource param = new BeanPropertySqlParameterSource(user);
+        return template.update(UserSQL.updateUser,param);
     }
 }

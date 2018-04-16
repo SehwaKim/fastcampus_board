@@ -3,6 +3,7 @@ package examples.teamboard.service;
 import examples.teamboard.dao.UserDAO;
 import examples.teamboard.domain.User;
 import examples.teamboard.util.SecureUtil;
+import examples.teamboard.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public  User getUserInfo(User user)
+    {
+        user = userDao.selectUser(user.getId());
+        return user;
+    }
+    @Override
     @Transactional
     public boolean signUp(User user) {
         boolean result = userDao.insertUser(user);
@@ -44,10 +52,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String updateUser(User user) {
-        //TODO
-        //유저정보 수정
-        return null;
+    @Transactional
+    public User updateUser(User user) {
+        user.setPwd(SecureUtil.sha256Encoding((user.getPwd())));
+        userDao.updateUser(user);
+        return userDao.selectUser(user.getId());
+    }
+
+    @Override
+    @Transactional
+    public User updateEmail(User user) {
+        userDao.updateEmail(user);
+        return userDao.selectUser(user.getId());
     }
 
     @Override

@@ -121,7 +121,39 @@ public class UserDAOTest {
         user.setNickname("selecTestNic");
         boolean inUser = userDAO.insertUser(user);
 
-        int result =  userDAO.updatePwd(user);
-        Assert.assertEquals(1, result);
+        user.setPwd(SecureUtil.sha256Encoding("updateTest"));
+        userDAO.updatePwd(user);
+        Assert.assertEquals(user.getPwd(),SecureUtil.sha256Encoding("updateTest"));
+    }
+
+    @Test
+    public  void testUpdateUser() {
+        User user = new User();
+        user.setId("selecTest");
+        user.setPwd(SecureUtil.sha256Encoding("selecTest"));
+        user.setEmail("selecTest@gmail.com");
+        user.setName("이업뎃");
+        user.setNickname("selecTestNic");
+        boolean inUser = userDAO.insertUser(user);
+
+        user.setEmail("updateTest@naver.com");
+        user.setPwd(SecureUtil.sha256Encoding("updateTest"));
+        userDAO.updateUser(user);
+        Assert.assertEquals(user.getEmail(),"updateTest@naver.com");
+    }
+
+    @Test
+    public  void testUpdateEmail() {
+        User user = new User();
+        user.setId("selecTest");
+        user.setPwd(SecureUtil.sha256Encoding("selecTest"));
+        user.setEmail("selecTest@gmail.com");
+        user.setName("이이멜");
+        user.setNickname("selecTestNic");
+        boolean inUser = userDAO.insertUser(user);
+
+        user.setEmail("updateTest@naver.com");
+        userDAO.updateEmail(user);
+        Assert.assertEquals(user.getEmail(),"updateTest@naver.com");
     }
 }

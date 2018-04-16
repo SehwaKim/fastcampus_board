@@ -22,41 +22,41 @@
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2">
         <article class="container">
             <div class="col-sm-7 col-md-8 col-md-offset-1">
-                <form role="form" action="/user/signup" method="post">
+                <form role="form" action="/user/update" method="post">
                     <div class="form-group">
                         <label for="name">성명</label>
-                        <input type="text" class="form-control" id="name" name="name" readonly>
+                        <input type="text" class="form-control" id="name" name="name" value="${user.name}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="id">아이디</label>
-                        <input type="text" class="form-control" id="id" name="id" readonly>
+                        <input type="text" class="form-control" id="id" name="id" value="${user.id}" readonly>
                     </div>
                     <div class="form-group">
                         <label for="email">이메일 주소</label>
-                        <input type="email" class="form-control" id="email" name="email">
+                        <input type="email" class="form-control" id="email" value="${user.email}" name="email">
                     </div>
                     <div class="form-group">
-                        <label for="pwd">비밀번호</label>
-                        <input type="password" class="form-control" id="pwd" name="pwd" >
+                        <label for="pwd">새 비밀번호</label>
+                        <input type="password" class="form-control" id="pwd" name="pwd">
                     </div>
                     <div class="form-group">
-                        <label for="pwdCheck">비밀번호 확인</label>
+                        <label for="pwdCheck">새 비밀번호 확인</label>
                         <input type="password" class="form-control" id="pwdCheck" onchange="checkPwd()">
                         <small id="pwdhelp" class="form-text text-muted" style="display: none;color: #D32F2F">
                             입력된 값은 비밀번호와 같은 값이어야 합니다.
                         </small>
                     </div>
+
                     <div class="form-group">
                         <label for="nickname" >별명</label>
-                        <input type="text" class="form-control" id="nickname" name="nickname" readonly>
+                        <input type="text" class="form-control" id="nickname" name="nickname" value="${user.nickname}" readonly>
                     </div>
 
-
                     <div class="form-group text-center">
-                        <button type="submit" id="update" class="btn btn-primary">
+                        <button type="submit" id="updateBtn" class="btn btn-primary">
                             수정하기<i class="fa fa-times spaceLeft"></i>
                         </button>
-                        <button type="submit" id="dropout" class="btn btn-warning">
+                        <button type="submit" id="dropoutBtn" class="btn btn-warning">
                             탈퇴하기<i class="fa fa-times spaceLeft"></i>
                         </button>
                     </div>

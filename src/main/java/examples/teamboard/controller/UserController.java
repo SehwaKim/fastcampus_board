@@ -26,6 +26,35 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @GetMapping("/update")
+    public String userUpdateForm(HttpSession session,ModelMap parameter) {
+        User user = (User)session.getAttribute("user");
+        if(user != null)
+        {
+            userService.getUserInfo(user);
+            parameter.addAttribute("user",user);
+            return "user/user_update";
+        }else{
+            return "redirect:/user/login";
+        }
+    }
+
+    @PostMapping("/update")
+    public String userUpdate(User user,HttpSession session) {
+
+        if(StringUtil.isNotBlank(user.getPwd()))
+        {
+           user =  userService.updateUser(user);
+
+        }else
+        {
+            user  =  userService.updateEmail(user);
+            System.out.println("user: " + user.getEmail());
+        }
+        session.setAttribute("user",user);
+        return "redirect:/boards";
+    }
+
     @PostMapping("/checkid")
     public@ResponseBody String checkId(User user, ModelAndView parameter)
     {
@@ -38,20 +67,15 @@ public class UserController {
         }
         return returnVal;
     }
+
     @GetMapping("/login")
     public String loginForm(@RequestParam(name ="referer",required = false) String referer,ModelMap parametor) {
         parametor.addAttribute("referer",referer);
         return "user/user_login";
     }
-    @GetMapping("/update")
-    public String userUpdate(@RequestParam(name ="referer",required = false) String referer,ModelMap parametor) {
-       // parametor.addAttribute("referer",referer);
-        return "user/user_update";
-    }
 
     @PostMapping("/login")
     public String login(@RequestParam(name="referer",required = false) String referer,User user, HttpSession session , ModelMap parameter) {
-
 
         user.setPwd(SecureUtil.sha256Encoding((user.getPwd())));
         user = userService.longIn(user);
