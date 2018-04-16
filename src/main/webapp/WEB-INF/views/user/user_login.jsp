@@ -33,6 +33,7 @@
         <div class="form-group">
             <input type="password" class="form-control" id="loginPwd" name="pwd" placeholder="PassWord">
         </div>
+        <input type="hidden" name="referer" value="${referer}">
         <div>
            Find <a class="nav-link" href="/user/findid">Id</a> or <a class="nav-link" href="/user/findpwd">Password</a>
         </div>

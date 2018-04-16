@@ -24,7 +24,7 @@
                 <%-- 로그인 했을때만 노출 시작 --%>
                 <c:if test="${sessionScope.user != null}">
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;${sessionScope.user.nickname}</a></li>
+                    <li><a href="/user/update"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;${sessionScope.user.nickname}</a></li>
                     <li><a href="/user/logout"><span class="glyphicon glyphicon-log-out"></span>&nbsp;&nbsp;로그아웃</a></li>
                 </ul>
                 </c:if>

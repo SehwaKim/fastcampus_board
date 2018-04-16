@@ -1,9 +1,11 @@
 package examples.teamboard.controller;
 
+import examples.teamboard.domain.Board;
 import examples.teamboard.domain.User;
 import examples.teamboard.service.UserService;
 import examples.teamboard.service.UserServiceImpl;
 import examples.teamboard.util.SecureUtil;
+import examples.teamboard.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,27 +38,34 @@ public class UserController {
         }
         return returnVal;
     }
-
     @GetMapping("/login")
-    public String loginForm() {
+    public String loginForm(@RequestParam(name ="referer",required = false) String referer,ModelMap parametor) {
+        parametor.addAttribute("referer",referer);
         return "user/user_login";
     }
+    @GetMapping("/update")
+    public String userUpdate(@RequestParam(name ="referer",required = false) String referer,ModelMap parametor) {
+       // parametor.addAttribute("referer",referer);
+        return "user/user_update";
+    }
+
     @PostMapping("/login")
-    public String login(@ModelAttribute User user, HttpSession session ,ModelMap parameter) {
-        if(session.getAttribute("user") == null) {
+    public String login(@RequestParam(name="referer",required = false) String referer,User user, HttpSession session , ModelMap parameter) {
 
-            user.setPwd(SecureUtil.sha256Encoding((user.getPwd())));
-            user = userService.longIn(user);
 
-            if(user != null){
-                user.setPwd(null);
-                session.setAttribute("user",user);
-            }
-            else
-            {
-                parameter.addAttribute("visible","true");
-                return "user/user_login";
-            }
+        user.setPwd(SecureUtil.sha256Encoding((user.getPwd())));
+        user = userService.longIn(user);
+
+        if(user != null){
+            user.setPwd(null);
+            session.setAttribute("user",user);
+        }
+        else {
+            parameter.addAttribute("visible","true");
+            return "user/user_login";
+        }
+        if(StringUtil.isNotBlank(referer)){
+            return "redirect:" + referer;
         }
         return "redirect:/boards";
     }
@@ -67,18 +76,16 @@ public class UserController {
         return "redirect:/boards";
     }
 
-    //    회원가입 페이지 이동
     @GetMapping("/signup")
     public String signupForm() {
         return "user/user_signup";
     }
-    
-    //    회원등록
+
     @PostMapping("/signup")
     public String signup(@ModelAttribute User user,ModelMap parameter) {
-        boolean result = false;
+
         user.setPwd(SecureUtil.sha256Encoding((user.getPwd())));
-        result = userService.signUp(user);
+        boolean result = userService.signUp(user);
 
         if(result == false) {
            //TODO
@@ -87,18 +94,17 @@ public class UserController {
         }
         return "redirect:/user/login";
     }
-    
-    //    아이디 찾기 페이지 이동
+
     @GetMapping("/findid")
     public String findidForm() {
         return "user/user_findid";
     }
     
-    //    아이디 찾기
+
     @PostMapping("/findid")
     public String findid(@ModelAttribute User user,ModelMap parameter) {
-        String id;
-        id = userService.findId(user);
+
+        String id = userService.findId(user);
         if(id == null){
             parameter.addAttribute("result","err");
             return "user/user_findid";
@@ -108,19 +114,17 @@ public class UserController {
         }
         return "user/user_result";
     }
-    
-    //    비밀번호 찾기 페이지 이동
+
     @GetMapping("/findpwd")
     public String findpwdForm() {
-        return "user/user_findpwd"; //로그인패이지 재활용...
+        return "user/user_findpwd";
     }
-    
-    //    임시비밀번호 발급
+
     @PostMapping("/findpwd")
     public String findpwd(@ModelAttribute User user,ModelMap parameter) {
-        String pwd;
+
         System.out.println(user.getId()+":" + user.getEmail());
-        pwd = userService.changePwd(user);
+        String pwd = userService.changePwd(user);
         System.out.println(pwd);
         if(pwd == null){
             parameter.addAttribute("result","err");
