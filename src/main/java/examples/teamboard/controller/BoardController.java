@@ -78,7 +78,7 @@ public class BoardController {
             , @RequestParam(required = false) String searchType, @RequestParam(required = false) String searchStr
             , @RequestParam(defaultValue = "1") int categoryNo
             , String title, String content
-            , @RequestParam("image") MultipartFile file
+            , @RequestParam(name = "image", required = false) MultipartFile file
             , HttpSession session) {
 
         // 파일 업로드
