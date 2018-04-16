@@ -23,7 +23,7 @@ public class UserServiceTest {
     private UserService userService;
 
     @Test
-    public  void testLogin() {
+    public void testLogin() {
         User user = new User();
         user.setId("LoginTest");
         user.setPwd(SecureUtil.sha256Encoding("LoginTest"));
@@ -32,8 +32,8 @@ public class UserServiceTest {
         user.setNickname("LoginTestNic");
         userService.signUp(user);
 
-        User user1 =  userService.longIn(user);
-        Assert.assertEquals(user1.getPwd(),user.getPwd());
+        User user1 = userService.longIn(user);
+        Assert.assertEquals(user1.getPwd(), user.getPwd());
     }
 
     @Test
@@ -48,11 +48,11 @@ public class UserServiceTest {
         boolean sing = userService.signUp(user);
         User user1 = userService.longIn(user);
 
-        Assert.assertEquals(user1.getPwd(),user.getPwd());
+        Assert.assertEquals(user1.getPwd(), user.getPwd());
     }
 
     @Test
-    public  void testFindId() {
+    public void testFindId() {
         User user = new User();
         user.setId("FindId");
         user.setPwd(SecureUtil.sha256Encoding("FindId"));
@@ -61,13 +61,13 @@ public class UserServiceTest {
         user.setNickname("FindIdNic");
         boolean sing = userService.signUp(user);
 
-        String userId =  userService.findId(user);
+        String userId = userService.findId(user);
 
         Assert.assertEquals(user.getId(), userId);
     }
 
     @Test
-        public  void testFindPwd() {
+    public void testFindPwd() {
         User user = new User();
         user.setId("FindPwd");
         user.setPwd(SecureUtil.sha256Encoding("FindPwd"));
@@ -80,17 +80,35 @@ public class UserServiceTest {
         Assert.assertEquals(user.getPwd(), userPwd);
     }
 
-        @Test
-        public  void testCheckId() {
-            User user = new User();
-            user.setId("CheckId");
-            user.setPwd(SecureUtil.sha256Encoding("CheckId"));
-            user.setEmail("CheckId@gmail.com");
-            user.setName("김체크");
-            user.setNickname("CheckIdNic");
-            boolean singup = userService.signUp(user);
 
-            boolean result =  userService.checkId(user);
-            Assert.assertTrue(result);
+    @Test
+    public void testCheckId() {
+        User user = new User();
+        user.setId("CheckId");
+        user.setPwd(SecureUtil.sha256Encoding("CheckId"));
+        user.setEmail("CheckId@gmail.com");
+        user.setName("김체크");
+        user.setNickname("CheckIdNic");
+        boolean singup = userService.signUp(user);
+
+        boolean result = userService.checkId(user);
+        Assert.assertTrue(result);
     }
+
+    @Test
+    public void testChangPwd () {
+        User user = new User();
+        user.setId("CheckId");
+        user.setPwd(SecureUtil.sha256Encoding("CheckId"));
+        user.setEmail("CheckId@gmail.com");
+        user.setName("김체크");
+        user.setNickname("CheckIdNic");
+        boolean singup = userService.signUp(user);
+
+        String uuid = userService.changePwd(user);
+        String pwd = userService.findPwd(user);
+        Assert.assertEquals(SecureUtil.sha256Encoding(uuid), pwd);
+
+    }
+
 }
