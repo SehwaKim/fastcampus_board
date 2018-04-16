@@ -3,6 +3,7 @@ package examples.teamboard.domain;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class Board {
@@ -16,4 +17,5 @@ public class Board {
     private int categoryNo;
     private Date udate;
     private int commentCnt;
+    private List<Long> fileNoList;
 }

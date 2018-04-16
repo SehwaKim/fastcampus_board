@@ -58,7 +58,13 @@
                         <textarea class="form-control" rows="10" id="content" readonly>${board.content}</textarea>
                     </div>
                 </div>
-
+                <div class="form-group">
+                    <c:forEach items="${board.fileNoList}" var="fileNo">
+                    <div class="col-sm-10">
+                        <img src="/boards/download/${fileNo}" name="image" id="image" alt="" style="width: 50%; height: auto;">
+                    </div>
+                    </c:forEach>
+                </div>
                 <div class="form-group">
                     <div class="col-sm-offset-1 col-sm-10" align="right">
                         <c:if test="${sessionScope.user.id == board.userId}" >

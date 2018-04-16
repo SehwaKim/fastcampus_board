@@ -28,14 +28,12 @@ public class UserDAO {
         insert = new SimpleJdbcInsert(dataSource).withTableName("user_info").usingGeneratedKeyColumns("user_no");
 
     }
-
     public User selectUser(String id)
     {
         User user = null;
         Map<String,String> map=Collections.singletonMap("id",id);
         try{
             user= template.queryForObject(UserSQL.selectUser, map,rowMapper);
-
         } catch (DataAccessException e){
            user = null;
         }
@@ -60,7 +58,6 @@ public class UserDAO {
         }
         return result;
     }
-
     public String selectUserId(String name,String email)
     {
         String userId = null;
@@ -92,5 +89,8 @@ public class UserDAO {
        SqlParameterSource param = new BeanPropertySqlParameterSource(user);
        return template.update(UserSQL.updatePwd,param);
     }
-
+    public  int updateUser()
+    {
+        return 0 ;
+    }
 }

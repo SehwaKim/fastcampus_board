@@ -4,7 +4,9 @@ import examples.teamboard.common.Pagination;
 import examples.teamboard.config.DBConfig;
 import examples.teamboard.config.RootApplicationContextConfig;
 import examples.teamboard.dao.BoardDAO;
+import examples.teamboard.dao.FileDAO;
 import examples.teamboard.domain.Board;
+import examples.teamboard.domain.FileInfo;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,6 +25,9 @@ import java.util.List;
 public class BoardServiceTest {
     @Autowired
     private BoardService boardService;
+
+    @Autowired
+    private FileDAO fileDAO;
 
     @Test
     public void testGetBoards(){
@@ -54,7 +59,7 @@ public class BoardServiceTest {
         List<Board> list = boardService.getBoards(pagination, 1, searchType, searchStr);
     }
 
-    @Test
+    /*@Test
     public void testGetBoard(){
         // given
         Board board = new Board();
@@ -69,9 +74,9 @@ public class BoardServiceTest {
 
         // then
         Assert.assertEquals(boardNo, board1.getBoardNo());
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void testAddBoard(){
         // when
         Board board = new Board();
@@ -85,9 +90,9 @@ public class BoardServiceTest {
         Board board1 = boardService.getBoard(boardNo);
         Assert.assertEquals(boardNo, board1.getBoardNo());
         Assert.assertEquals(board.getContent(), board1.getContent());
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void testUpdateBoard(){
         // given
         Board board = new Board();
@@ -105,9 +110,9 @@ public class BoardServiceTest {
         // then
         Board board1 = boardService.getBoard(boardNo);
         Assert.assertEquals(board.getContent(), board1.getContent());
-    }
+    }*/
 
-    @Test
+    /*@Test
     public void testDeleteBoard(){
         // given
         Board board = new Board();
@@ -122,7 +127,7 @@ public class BoardServiceTest {
 
         // then
         Assert.assertNull(boardService.getBoard(boardNo));
-    }
+    }*/
 
     @Test
     public void testGetTotalCnt(){
@@ -146,5 +151,27 @@ public class BoardServiceTest {
 
         // when
         boardService.getTotalCnt(searchType, searchStr);
+    }
+
+    @Test
+    public void testGetFileInfo(){
+        // given
+        FileInfo fileInfo = new FileInfo();
+        fileInfo.setBoardNo(1L);
+        fileInfo.setName("aaa.png");
+        fileInfo.setPath("tmp/download/aaa.png");
+        fileInfo.setType("image/png");
+        fileInfo.setSize(29292);
+
+        Long fileNo = fileDAO.insertFile(fileInfo);
+
+        // when
+        FileInfo selectedFileInfo = boardService.getFileInfo(fileNo);
+
+        // then
+        Assert.assertNotNull(fileInfo);
+        Assert.assertEquals(fileInfo.getPath(), selectedFileInfo.getPath());
+        Assert.assertEquals(fileInfo.getSize(), selectedFileInfo.getSize());
+        Assert.assertEquals(fileInfo.getType(), selectedFileInfo.getType());
     }
 }
