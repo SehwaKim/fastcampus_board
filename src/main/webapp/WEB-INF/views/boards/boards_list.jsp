@@ -79,19 +79,19 @@
                 <ul class="pagination">
                     <c:if test="${pagination.hasPrev()}">
                         <li>
-                            <a href="/boards?page=${pagination.startPage-1}&searchType=${searchType}&searchStr=${searchStr}" aria-label="Previous">
+                            <a href="/boards?categoryNo=${categoryNo}&page=${pagination.startPage-1}&searchType=${searchType}&searchStr=${searchStr}" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
                     </c:if>
                     <c:forEach begin="${pagination.startPage}" end="${pagination.endPage}" step="1" var="num">
                       <li id="${num}" <c:if test="${page == num}">class="active"</c:if>>
-                          <a href="/boards?page=${num}&searchType=${searchType}&searchStr=${searchStr}">${num}</a>
+                          <a href="/boards?categoryNo=${categoryNo}&page=${num}&searchType=${searchType}&searchStr=${searchStr}">${num}</a>
                       </li>
                     </c:forEach>
                     <c:if test="${pagination.hasNext()}">
                         <li>
-                            <a href="/boards?page=${pagination.endPage+1}&searchType=${searchType}&searchStr=${searchStr}" aria-label="Next">
+                            <a href="/boards?categoryNo=${categoryNo}&page=${pagination.endPage+1}&searchType=${searchType}&searchStr=${searchStr}" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
