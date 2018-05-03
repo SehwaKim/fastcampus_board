@@ -14,7 +14,6 @@
 <%-- 탑 네이게이션 시작 --%>
 <%@include file="/WEB-INF/views/common/top_nav.jsp"%>
 <%-- 탑 네비게이션 끝 --%>
-<%-- css가운대 정렬 어떻게 해야되나요 ... ;;;--%>
 <div class="container">
     <div class="bg-success centered text-center" style="margin-top: 10px">
         ${title} : ${result}

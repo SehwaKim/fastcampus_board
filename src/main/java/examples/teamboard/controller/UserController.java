@@ -147,9 +147,7 @@ public class UserController {
     @PostMapping("/findpwd")
     public String findpwd(@ModelAttribute User user,ModelMap parameter) {
 
-        System.out.println(user.getId()+":" + user.getEmail());
         String pwd = userService.changePwd(user);
-        System.out.println(pwd);
         if(pwd == null){
             parameter.addAttribute("result","err");
             return "user/user_findpwd";

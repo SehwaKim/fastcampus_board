@@ -4,12 +4,7 @@ import examples.teamboard.common.LoginInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-
 import org.springframework.web.multipart.MultipartResolver;
-<<<<<<< HEAD
-
-=======
->>>>>>> 6f999442429888073e22094d209a792472f5fe5a
 import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
