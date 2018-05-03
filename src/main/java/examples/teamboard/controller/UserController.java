@@ -1,6 +1,8 @@
 package examples.teamboard.controller;
 
+import examples.teamboard.common.CommonCategory;
 import examples.teamboard.domain.Board;
+import examples.teamboard.domain.Category;
 import examples.teamboard.domain.User;
 import examples.teamboard.service.UserService;
 import examples.teamboard.service.UserServiceImpl;
@@ -15,9 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("/user")
@@ -26,6 +26,13 @@ public class UserController {
     @Autowired
     UserService userService;
 
+    @ModelAttribute("userCategories")
+    public List<CommonCategory> categories() {
+      List<CommonCategory> list = new ArrayList<>();
+      list.add(new CommonCategory("회원정보수정","update"));
+      list.add(new CommonCategory("비밀번호변경","updatePwd"));
+      return list;
+    }
     @GetMapping("/update")
     public String userUpdateForm(HttpSession session,ModelMap parameter) {
         User user = (User)session.getAttribute("user");
@@ -34,6 +41,18 @@ public class UserController {
             userService.getUserInfo(user);
             parameter.addAttribute("user",user);
             return "user/user_update";
+        }else{
+            return "redirect:/user/login";
+        }
+    }
+    @GetMapping("/updatePwd")
+    public String pwdUpdateForm(HttpSession session,ModelMap parameter) {
+        User user = (User)session.getAttribute("user");
+        if(user != null)
+        {
+            userService.getUserInfo(user);
+            parameter.addAttribute("user",user);
+            return "user/user_uppwd";
         }else{
             return "redirect:/user/login";
         }

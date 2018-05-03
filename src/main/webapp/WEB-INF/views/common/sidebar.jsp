@@ -6,5 +6,10 @@
                     <li <c:if test="${categoryNo eq c.categoryNo}">class="active"</c:if>><a href="/boards?categoryNo=${c.categoryNo}">${c.name}<span class="sr-only"></span></a></li>
                 </c:forEach>
             </c:if>
+            <c:if test="${userCategories != null}">
+                <c:forEach items="${userCategories}" var="c">
+                    <li><a href="/user/${c.path}">${c.name}<span class="sr-only"></span></a></li>
+                </c:forEach>
+            </c:if>
         </ul>
     </div>
