@@ -2,11 +2,9 @@ package examples.teamboard.controller;
 
 
 import examples.teamboard.common.Pagination;
-import examples.teamboard.domain.Board;
-import examples.teamboard.domain.Comment;
-import examples.teamboard.domain.FileInfo;
-import examples.teamboard.domain.User;
+import examples.teamboard.domain.*;
 import examples.teamboard.service.BoardService;
+import examples.teamboard.service.CategoryService;
 import examples.teamboard.service.CommentService;
 import examples.teamboard.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +27,17 @@ public class BoardController {
 
     @Autowired
     private BoardService boardService;
+
+    @Autowired
+    private CategoryService categoryService;
     
     @Autowired
     private CommentService commentService;
+
+    @ModelAttribute("categories") // 뷰페이지에 전달할 변수 명
+    public List<Category> categories() {
+        return categoryService.getCategories(); // 카테고리 조회
+    }
 
 //    게시글 리스트
     @GetMapping
@@ -43,7 +49,7 @@ public class BoardController {
 
         int totalCnt = boardService.getTotalCnt(searchType, searchStr);
         Pagination pagination = new Pagination(totalCnt,10, page);
-        List<Board> boardList = boardService.getBoards(pagination, 1, searchType, searchStr);
+        List<Board> boardList = boardService.getBoards(pagination, categoryNo, searchType, searchStr);
 
         modelMap.addAttribute("page", page);
         modelMap.addAttribute("categoryNo", categoryNo);
