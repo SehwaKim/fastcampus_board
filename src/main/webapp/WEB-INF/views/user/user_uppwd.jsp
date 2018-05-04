@@ -30,6 +30,10 @@
                     <form role="form" action="/user/updatePwd" method="post">
 
                         <div class="form-group">
+                            <label for="oldPwd">현재 비밀번호</label>
+                            <input type="password" class="form-control" id="oldPwd" name="oldPwd">
+                        </div>
+                        <div class="form-group">
                             <label for="pwd">새 비밀번호</label>
                             <input type="password" class="form-control" id="pwd" name="pwd">
                         </div>
@@ -41,7 +45,7 @@
                             </small>
                         </div>
                         <div class="form-group text-center">
-                            <button type="submit" id="updateBtn" class="btn btn-primary">
+                            <button id="updatePwdBtn" class="btn btn-primary">
                                 수정하기<i class="fa fa-times spaceLeft"></i>
                             </button>
                         </div>

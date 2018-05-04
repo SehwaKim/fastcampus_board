@@ -38,17 +38,17 @@
                         </div>
                         <div class="form-group">
                             <label for="email">이메일 주소</label>
-                            <input type="email" class="form-control" id="email" value="${user.email}" name="email">
+                            <input type="email" class="form-control" id="email" name="email" value="${user.email}">
                         </div>
                         <div class="form-group">
                             <label for="nickname" >별명</label>
-                            <input type="text" class="form-control" id="nickname" name="nickname" value="${user.nickname}" readonly>
+                            <input type="text" class="form-control" id="nickname" name="nickname" value="${user.nickname}">
                         </div>
                         <div class="form-group text-center">
-                            <button type="submit" id="updateBtn" class="btn btn-primary">
+                            <button id="updateBtn" class="btn btn-primary">
                                 수정하기<i class="fa fa-times spaceLeft"></i>
                             </button>
-                            <button type="submit" id="dropoutBtn" class="btn btn-warning">
+                            <button id="dropoutBtn" class="btn btn-warning">
                                 탈퇴하기<i class="fa fa-times spaceLeft"></i>
                             </button>
                         </div>

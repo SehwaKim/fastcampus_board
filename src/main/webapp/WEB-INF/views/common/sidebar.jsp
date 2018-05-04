@@ -8,7 +8,7 @@
             </c:if>
             <c:if test="${userCategories != null}">
                 <c:forEach items="${userCategories}" var="c">
-                    <li><a href="/user/${c.path}">${c.name}<span class="sr-only"></span></a></li>
+                    <li><a href="/user/${c.path}">${c.name}</a></li>
                 </c:forEach>
             </c:if>
         </ul>

@@ -22,6 +22,7 @@
             }
         });
     }
+
     function checkPwd() {
         var pwd = $("#pwd").val();
         var comPwd = $("#pwdCheck").val();
@@ -57,5 +58,24 @@
             }
         });
     }
+
+
+    $(document).ready(function(){
+        $("#updateBtn").click(function(){
+            if(confirm("수정하시겠습니까?")){
+                document.forms.action = "${path}/user/update";
+                document.forms.submit();
+            }
+        });
+    });
+
+    $(document).ready(function(){
+        $("#updatePwdBtn").click(function(){
+            if(confirm("수정하시겠습니까?")){
+                document.forms.action = "${path}/user/updatePwd";
+                document.forms.submit();
+            }
+        });
+    });
 </script>
 

@@ -1,21 +1,13 @@
 package examples.teamboard.controller;
 
 import examples.teamboard.common.CommonCategory;
-import examples.teamboard.domain.Board;
-import examples.teamboard.domain.Category;
 import examples.teamboard.domain.User;
 import examples.teamboard.service.UserService;
-import examples.teamboard.service.UserServiceImpl;
-import examples.teamboard.util.SecureUtil;
 import examples.teamboard.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.*;
 
@@ -33,49 +25,10 @@ public class UserController {
       list.add(new CommonCategory("비밀번호변경","updatePwd"));
       return list;
     }
-    @GetMapping("/update")
-    public String userUpdateForm(HttpSession session,ModelMap parameter) {
-        User user = (User)session.getAttribute("user");
-        if(user != null)
-        {
-            userService.getUserInfo(user);
-            parameter.addAttribute("user",user);
-            return "user/user_update";
-        }else{
-            return "redirect:/user/login";
-        }
-    }
-    @GetMapping("/updatePwd")
-    public String pwdUpdateForm(HttpSession session,ModelMap parameter) {
-        User user = (User)session.getAttribute("user");
-        if(user != null)
-        {
-            userService.getUserInfo(user);
-            parameter.addAttribute("user",user);
-            return "user/user_uppwd";
-        }else{
-            return "redirect:/user/login";
-        }
-    }
-
-    @PostMapping("/update")
-    public String userUpdate(User user,HttpSession session) {
-
-        if(StringUtil.isNotBlank(user.getPwd()))
-        {
-           user =  userService.updateUser(user);
-
-        }else
-        {
-            user  =  userService.updateEmail(user);
-            System.out.println("user: " + user.getEmail());
-        }
-        session.setAttribute("user",user);
-        return "redirect:/boards";
-    }
 
     @PostMapping("/checkid")
-    public@ResponseBody String checkId(User user, ModelAndView parameter)
+    @ResponseBody
+    public String checkId(User user)
     {
         boolean isExistId = userService.checkId(user);
         String returnVal = "no";
@@ -87,6 +40,34 @@ public class UserController {
         return returnVal;
     }
 
+    @GetMapping("/update")
+    public String userUpdateForm(HttpSession session,ModelMap parameter) {
+        User user = (User)session.getAttribute("user");
+        return "user/user_update";
+    }
+
+    @PostMapping("/update")
+    public String userUpdate(User user,HttpSession session) {
+
+        session.setAttribute("user",user);
+        userService.updateUser(user);
+        return "redirect:/user/update";
+    }
+
+    @GetMapping("/updatePwd")
+    public String pwdUpdateForm(HttpSession session,ModelMap parameter) {
+        User user = (User)session.getAttribute("user");
+        return "user/user_uppwd";
+    }
+    @PostMapping("/updatePwd")
+    public String pwdUpdate(User user,HttpSession session) {
+        String userId  = ((User)session.getAttribute("user")).getId();
+
+        userService.updatePwd(userId,user.getPwd());
+        return "redirect:/user/logout";
+    }
+
+
     @GetMapping("/login")
     public String loginForm(@RequestParam(name ="referer",required = false) String referer,ModelMap parametor) {
         parametor.addAttribute("referer",referer);
@@ -96,7 +77,6 @@ public class UserController {
     @PostMapping("/login")
     public String login(@RequestParam(name="referer",required = false) String referer,User user, HttpSession session , ModelMap parameter) {
 
-        user.setPwd(SecureUtil.sha256Encoding((user.getPwd())));
         user = userService.longIn(user);
 
         if(user != null){
@@ -107,8 +87,8 @@ public class UserController {
             parameter.addAttribute("visible","true");
             return "user/user_login";
         }
-        if(StringUtil.isNotBlank(referer)){
-            return "redirect:" + referer;
+        if(StringUtil.isNotBlank(referer)){ //이전경로가 있을 때
+            return "redirect:" + referer; //이전경로로 refer...
         }
         return "redirect:/boards";
     }
@@ -126,11 +106,9 @@ public class UserController {
 
     @PostMapping("/signup")
     public String signup(@ModelAttribute User user,ModelMap parameter) {
+        int result = userService.signUp(user);
 
-        user.setPwd(SecureUtil.sha256Encoding((user.getPwd())));
-        boolean result = userService.signUp(user);
-
-        if(result == false) {
+        if(result == 0) {
            //TODO
             //회원등록이 정상적으로 이루어 지지 않았습니다.(forward처리..)
             //return "error";
@@ -166,7 +144,7 @@ public class UserController {
     @PostMapping("/findpwd")
     public String findpwd(@ModelAttribute User user,ModelMap parameter) {
 
-        String pwd = userService.changePwd(user);
+        String pwd = userService.changeTempPwd(user);
         if(pwd == null){
             parameter.addAttribute("result","err");
             return "user/user_findpwd";

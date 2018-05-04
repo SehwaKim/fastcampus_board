@@ -32,71 +32,67 @@ public class UserDAO {
     {
         User user;
         Map<String,String> map=Collections.singletonMap("id",id);
-        try{
-            user= template.queryForObject(UserSQL.selectUser, map,rowMapper);
-        } catch (DataAccessException e){
-           user = null;
-        }
+        user= template.queryForObject(UserSQL.selectUser, map,rowMapper);
+
         return user;
     }
     public int selectUserCnt(String id)
     {
         Map<String,String> map=Collections.singletonMap("id",id);
-        int cnt= template.queryForObject(UserSQL.selectUserCnt, map,Integer.class);
-        return cnt;
+        int count= template.queryForObject(UserSQL.selectUserCnt, map,Integer.class);
+
+        return count;
 
     }
-    public boolean insertUser(User user)
+    public int insertUser(User user)
     {
-        boolean result;
         SqlParameterSource parameterSource = new BeanPropertySqlParameterSource(user);
-        try {
-            insert.execute(parameterSource);
-            result = true;
-        } catch (DataAccessException e) {
-            result = false;
-        }
-        return result;
+        int count =  insert.execute(parameterSource);
+        return count;
     }
     public String selectUserId(String name,String email)
     {
-        String userId = null;
+        String userId;
         Map<String,String> map = new HashMap<>();
         map.put("name",name);
         map.put("email",email);
-        try {
-            userId = template.queryForObject(UserSQL.selectUserId,map,String.class);
-        }catch (DataAccessException e){
-           userId = null;
-        }
+        userId = template.queryForObject(UserSQL.selectUserId,map,String.class);
+
         return userId;
     }
     public String selectUserPwd(String id, String email)
     {
-        String userPwd = null;
         Map<String,String> map = new HashMap<>();
         map.put("id",id);
         map.put("email",email);
-        try {
-            userPwd = template.queryForObject(UserSQL.selectUserPwd,map,String.class);
-        }catch (DataAccessException e){
-            userPwd = null;
-        }
-        return userPwd;
+        String userpwd = template.queryForObject(UserSQL.selectUserPwd,map,String.class);
+
+        return userpwd;
     }
-    public int updatePwd(User user)
+
+    public int updatePwd(String id, String pwd)
     {
-       SqlParameterSource param = new BeanPropertySqlParameterSource(user);
-       return template.update(UserSQL.updatePwd,param);
+        Map<String,String> map = new HashMap<>();
+        map.put("id",id);
+        map.put("pwd",pwd);
+       int count = template.update(UserSQL.updatePwd,map);
+
+       return count;
     }
-    public int updateEmail(User user)
-    {
-        SqlParameterSource param = new BeanPropertySqlParameterSource(user);
-        return template.update(UserSQL.updateEmail,param);
-    }
+
     public  int updateUser(User user)
     {
         SqlParameterSource param = new BeanPropertySqlParameterSource(user);
-        return template.update(UserSQL.updateUser,param);
+        int count = template.update(UserSQL.updateUser,param);
+
+        return count;
+    }
+
+    public int deleteUser(String id)
+    {
+        Map<String,String> map=Collections.singletonMap("id",id);
+        int count =  template.queryForObject(UserSQL.deleteUser, map,Integer.class);
+
+        return count;
     }
 }

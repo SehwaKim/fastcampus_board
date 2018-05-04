@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public User longIn(User user) {
         User dbUser = userDao.selectUser(user.getId());
-        if(dbUser != null && (user.getPwd().equals(dbUser.getPwd())))
+        if(dbUser != null && (SecureUtil.sha256Encoding(user.getPwd()).equals(dbUser.getPwd())))
             user  = dbUser;
         else{
             user = null;
@@ -30,49 +30,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public int signUp(User user) {
+        user.setPwd(SecureUtil.sha256Encoding(user.getPwd()));
+        return userDao.insertUser(user);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public  User getUserInfo(User user)
     {
-        user = userDao.selectUser(user.getId());
-        return user;
-    }
-    @Override
-    @Transactional
-    public boolean signUp(User user) {
-        boolean result = userDao.insertUser(user);
-        System.out.println("service return : " + result);
-        return  result;
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public String findPwd(User user) {
-        String pwd = userDao.selectUserPwd(user.getId(),user.getEmail());
-        return pwd;
+        return userDao.selectUser(user.getId());
     }
 
     @Override
     @Transactional
-    public User updateUser(User user) {
-        user.setPwd(SecureUtil.sha256Encoding((user.getPwd())));
+    public User updateUser(User user) { //유저정보업데이트
         userDao.updateUser(user);
         return userDao.selectUser(user.getId());
     }
 
     @Override
     @Transactional
-    public User updateEmail(User user) {
-        userDao.updateEmail(user);
-        return userDao.selectUser(user.getId());
+    public User updatePwd(String id, String pwd) { //유저비밀번호업데이트
+        userDao.updatePwd(id,SecureUtil.sha256Encoding(pwd));
+        return userDao.selectUser(id);
     }
 
     @Override
     @Transactional
-    public String changePwd(User user) {
+    public String changeTempPwd(User user) { //분실 : 임시비밀번호 발급
         String uuid = UUID.randomUUID().toString();
         uuid= uuid.substring(0,5);
-        user.setPwd(SecureUtil.sha256Encoding(uuid));
-        userDao.updatePwd(user);
+        userDao.updatePwd(user.getId(),SecureUtil.sha256Encoding(uuid));
         return uuid;
     }
 
@@ -85,10 +75,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
+    public String findPwd(User user) {
+        String pwd = userDao.selectUserPwd(user.getId(),user.getEmail());
+        return pwd;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public boolean checkId(User user) {
         boolean result = false;
-        int cnt = userDao.selectUserCnt(user.getId());
-        if(cnt == 1)
+        int count = userDao.selectUserCnt(user.getId());
+        if(count == 1)
             result = true;
         return result;
     }
