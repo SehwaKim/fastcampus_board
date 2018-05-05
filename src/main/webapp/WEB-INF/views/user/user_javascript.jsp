@@ -67,9 +67,6 @@
                 document.forms.submit();
             }
         });
-    });
-
-    $(document).ready(function(){
         $("#updatePwdBtn").click(function(){
             if(confirm("수정하시겠습니까?")){
                 document.forms.action = "${path}/user/updatePwd";
@@ -77,5 +74,6 @@
             }
         });
     });
+
 </script>
 

@@ -14,11 +14,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-import examples.teamboard.service.UserService;
-import examples.teamboard.service.UserServiceImpl;
 
 import javax.sql.DataSource;
-import javax.xml.ws.Service;
 import java.security.NoSuchAlgorithmException;
 @Rollback
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -46,7 +43,8 @@ public class UserDAOTest {
         user.setEmail("selecTest@gmail.com");
         user.setName("이셀렉");
         user.setNickname("selecTestNic");
-        boolean inUser = userDAO.insertUser(user);
+        int count = userDAO.insertUser(user);
+        Assert.assertEquals(1,count);
 
         User user1 = userDAO.selectUser(user.getId());
         Assert.assertEquals(user1.getId(), user.getId());
@@ -60,10 +58,11 @@ public class UserDAOTest {
         user.setEmail("selecTestCnt@gmail.com");
         user.setName("김카운트");
         user.setNickname("selecTestCntNic");
-        boolean inUser = userDAO.insertUser(user);
+        int count = userDAO.insertUser(user);
+        Assert.assertEquals(1,count);
 
-        int cnt = userDAO.selectUserCnt(user.getId());
-        Assert.assertEquals(1, cnt);
+        int numofUser = userDAO.selectUserCnt(user.getId());
+        Assert.assertEquals(1, numofUser);
     }
 
     @Test
@@ -74,7 +73,8 @@ public class UserDAOTest {
         user.setEmail("InsertTest@gmail.com");
         user.setName("김인설");
         user.setNickname("InsertTestNic");
-        userDAO.insertUser(user);
+        int count = userDAO.insertUser(user);
+        Assert.assertEquals(1,count);
 
         String compId = userDAO.selectUserId(user.getName(),user.getEmail());
         Assert.assertEquals(user.getId(),compId);
@@ -89,7 +89,8 @@ public class UserDAOTest {
         user.setEmail("SelecIDTest@gmail.com");
         user.setName("김아이디");
         user.setNickname("SelecIDTestNic");
-        userDAO.insertUser(user);
+        int count = userDAO.insertUser(user);
+        Assert.assertEquals(1,count);
 
         String userId =  userDAO.selectUserId(user.getName(),user.getEmail());
         Assert.assertEquals(user.getId(), userId);
@@ -104,10 +105,10 @@ public class UserDAOTest {
         user.setEmail("SelecPwdTest@gmail.com");
         user.setName("김패스");
         user.setNickname("SelecPwdTestNic");
-        userDAO.insertUser(user);
+        int count = userDAO.insertUser(user);
+        Assert.assertEquals(1,count);
 
         String userPwd =  userDAO.selectUserPwd(user.getId(),user.getEmail());
-
         Assert.assertEquals(user.getPwd(), userPwd);
     }
 
@@ -119,10 +120,11 @@ public class UserDAOTest {
         user.setEmail("selecTest@gmail.com");
         user.setName("이업뎃");
         user.setNickname("selecTestNic");
-        boolean inUser = userDAO.insertUser(user);
+        int count = userDAO.insertUser(user);
+        Assert.assertEquals(1,count);
 
         user.setPwd(SecureUtil.sha256Encoding("updateTest"));
-        userDAO.updatePwd(user);
+        userDAO.updatePwd(user.getId(),user.getPwd());
         Assert.assertEquals(user.getPwd(),SecureUtil.sha256Encoding("updateTest"));
     }
 
@@ -134,26 +136,14 @@ public class UserDAOTest {
         user.setEmail("selecTest@gmail.com");
         user.setName("이업뎃");
         user.setNickname("selecTestNic");
-        boolean inUser = userDAO.insertUser(user);
+        int count = userDAO.insertUser(user);
+        Assert.assertEquals(1,count);
 
         user.setEmail("updateTest@naver.com");
-        user.setPwd(SecureUtil.sha256Encoding("updateTest"));
+        user.setNickname("TestNickName");
         userDAO.updateUser(user);
         Assert.assertEquals(user.getEmail(),"updateTest@naver.com");
+        Assert.assertEquals(user.getNickname(),"TestNickName");
     }
 
-    @Test
-    public  void testUpdateEmail() {
-        User user = new User();
-        user.setId("selecTest");
-        user.setPwd(SecureUtil.sha256Encoding("selecTest"));
-        user.setEmail("selecTest@gmail.com");
-        user.setName("이이멜");
-        user.setNickname("selecTestNic");
-        boolean inUser = userDAO.insertUser(user);
-
-        user.setEmail("updateTest@naver.com");
-        userDAO.updateEmail(user);
-        Assert.assertEquals(user.getEmail(),"updateTest@naver.com");
-    }
 }

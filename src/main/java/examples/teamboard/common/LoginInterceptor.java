@@ -20,6 +20,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
         User user = (User)session.getAttribute("user");
         String currentPath = request.getServletPath();
 
+        //TODO
+        //회원정보 접근 필터처리 필요
         if(user == null){
             response.sendRedirect("/user/login?referer="+currentPath);
             return false;

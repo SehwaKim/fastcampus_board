@@ -30,11 +30,11 @@ public class UserController {
     @ResponseBody
     public String checkId(User user)
     {
-        boolean isExistId = userService.checkId(user);
+        int isExistId = userService.checkId(user);
         String returnVal = "no";
-        if(isExistId == false){
+        if(isExistId == 0){
             returnVal ="no";
-        }else if(isExistId == true){
+        }else if(isExistId == 1){
             returnVal ="yes";
         }
         return returnVal;
@@ -42,15 +42,13 @@ public class UserController {
 
     @GetMapping("/update")
     public String userUpdateForm(HttpSession session,ModelMap parameter) {
-        User user = (User)session.getAttribute("user");
         return "user/user_update";
     }
 
     @PostMapping("/update")
     public String userUpdate(User user,HttpSession session) {
-
-        session.setAttribute("user",user);
         userService.updateUser(user);
+        session.setAttribute("user",user);
         return "redirect:/user/update";
     }
 
@@ -77,7 +75,9 @@ public class UserController {
     @PostMapping("/login")
     public String login(@RequestParam(name="referer",required = false) String referer,User user, HttpSession session , ModelMap parameter) {
 
-        user = userService.longIn(user);
+        //TODO
+        //@Valid 유효성체크 구현
+        user = userService.login(user);
 
         if(user != null){
             user.setPwd(null);
@@ -87,8 +87,8 @@ public class UserController {
             parameter.addAttribute("visible","true");
             return "user/user_login";
         }
-        if(StringUtil.isNotBlank(referer)){ //이전경로가 있을 때
-            return "redirect:" + referer; //이전경로로 refer...
+        if(StringUtil.isNotBlank(referer)){
+            return "redirect:" + referer;
         }
         return "redirect:/boards";
     }
@@ -110,8 +110,8 @@ public class UserController {
 
         if(result == 0) {
            //TODO
-            //회원등록이 정상적으로 이루어 지지 않았습니다.(forward처리..)
-            //return "error";
+            //회원등록이 정상적으로 이루어 지지 않았습니다.
+            //예외발생화면 필터 처리 or 컨트롤러 예외 처리
         }
         return "redirect:/user/login";
     }
@@ -152,6 +152,13 @@ public class UserController {
             parameter.addAttribute("title","임시 비밀번호");
             parameter.addAttribute("result",pwd);
         }
+        return "user/user_result";
+    }
+
+    @GetMapping("/dropout")
+    public String dropOut() {
+        //TODO
+        //회원탈퇴 작성
         return "user/user_result";
     }
 }

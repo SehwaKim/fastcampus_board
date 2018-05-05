@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
     UserDAO userDao;
     @Override
     @Transactional(readOnly = true)
-    public User longIn(User user) {
+    public User login(User user) {
         User dbUser = userDao.selectUser(user.getId());
         if(dbUser != null && (SecureUtil.sha256Encoding(user.getPwd()).equals(dbUser.getPwd())))
             user  = dbUser;
@@ -38,8 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public  User getUserInfo(User user)
-    {
+    public  User getUserInfo(User user) {
         return userDao.selectUser(user.getId());
     }
 
@@ -82,11 +81,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public boolean checkId(User user) {
-        boolean result = false;
+    public int checkId(User user) {
         int count = userDao.selectUserCnt(user.getId());
-        if(count == 1)
-            result = true;
-        return result;
+        return count;
     }
 }
